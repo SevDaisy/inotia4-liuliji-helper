@@ -1,0 +1,230 @@
+[
+  {
+    "b": -1,
+    "count": 1,
+    "delay": 50,
+    "duration": 10,
+    "point": {
+      "count": 1,
+      "delay": 0,
+      "duration": 0,
+      "gravity": 0,
+      "index": 0,
+      "x": 145,
+      "y": 33
+    },
+    "randomDelay": 0,
+    "randomDistance": 5,
+    "randomDuration": 0,
+    "type": 0
+  },
+  {
+    "b": -1,
+    "count": 1,
+    "delay": 200,
+    "duration": 10,
+    "point": {
+      "count": 1,
+      "delay": 0,
+      "duration": 0,
+      "gravity": 0,
+      "index": 0,
+      "x": 150,
+      "y": 557
+    },
+    "randomDelay": 0,
+    "randomDistance": 5,
+    "randomDuration": 0,
+    "type": 0
+  },
+  {
+    "b": -1,
+    "count": 1,
+    "delay": 200,
+    "duration": 10,
+    "point": {
+      "count": 1,
+      "delay": 0,
+      "duration": 0,
+      "gravity": 0,
+      "index": 0,
+      "x": 1990,
+      "y": 14
+    },
+    "randomDelay": 0,
+    "randomDistance": 5,
+    "randomDuration": 0,
+    "type": 0
+  },
+  {
+    "b": -1,
+    "count": 1,
+    "delay": 0,
+    "duration": 0,
+    "point": {
+      "count": 1,
+      "delay": 0,
+      "duration": 0,
+      "gravity": 0,
+      "index": 0,
+      "x": 1283,
+      "y": 755
+    },
+    "randomDelay": 0,
+    "randomDistance": 0,
+    "randomDuration": 0,
+    "type": 0
+  },
+  {
+    "b": -1,
+    "count": 1,
+    "delay": 200,
+    "duration": 10,
+    "point": {
+      "count": 1,
+      "delay": 0,
+      "duration": 0,
+      "gravity": 0,
+      "index": 0,
+      "x": 1053,
+      "y": 579
+    },
+    "randomDelay": 0,
+    "randomDistance": 5,
+    "randomDuration": 0,
+    "type": 0
+  },
+  {
+    "b": -1,
+    "count": 1,
+    "delay": 500,
+    "duration": 10,
+    "point": {
+      "count": 1,
+      "delay": 0,
+      "duration": 0,
+      "gravity": 0,
+      "index": 0,
+      "x": 1324,
+      "y": 939
+    },
+    "randomDelay": 0,
+    "randomDistance": 5,
+    "randomDuration": 0,
+    "type": 0
+  },
+  {
+    "b": -1,
+    "count": 1,
+    "delay": 0,
+    "duration": 0,
+    "point": {
+      "count": 1,
+      "delay": 0,
+      "duration": 0,
+      "gravity": 0,
+      "index": 0,
+      "x": 1586,
+      "y": 630
+    },
+    "randomDelay": 0,
+    "randomDistance": 0,
+    "randomDuration": 0,
+    "type": 0
+  },
+  {
+    "b": -1,
+    "count": 1,
+    "delay": 500,
+    "duration": 10,
+    "point": {
+      "count": 1,
+      "delay": 0,
+      "duration": 0,
+      "gravity": 0,
+      "index": 0,
+      "x": 1304,
+      "y": 233
+    },
+    "randomDelay": 20,
+    "randomDistance": 20,
+    "randomDuration": 0,
+    "type": 0
+  },
+  {
+    "b": -1,
+    "count": 1,
+    "delay": 800,
+    "duration": 20,
+    "point": {
+      "count": 1,
+      "delay": 0,
+      "duration": 0,
+      "gravity": 0,
+      "index": 0,
+      "x": 150,
+      "y": 554
+    },
+    "randomDelay": 0,
+    "randomDistance": 5,
+    "randomDuration": 0,
+    "type": 0
+  },
+  {
+    "b": -1,
+    "count": 1,
+    "delay": 200,
+    "duration": 10,
+    "point": {
+      "count": 1,
+      "delay": 0,
+      "duration": 0,
+      "gravity": 0,
+      "index": 0,
+      "x": 985,
+      "y": 30
+    },
+    "randomDelay": 0,
+    "randomDistance": 5,
+    "randomDuration": 0,
+    "type": 0
+  },
+  {
+    "b": -1,
+    "count": 1,
+    "delay": 200,
+    "duration": 300,
+    "randomDelay": 0,
+    "randomDistance": 5,
+    "randomDuration": 0,
+    "swipeCombData": {
+      "a": 0,
+      "b": 0,
+      "c": 0,
+      "count": 1,
+      "d": 0,
+      "delay": 0,
+      "duration": 0,
+      "gravity": 0,
+      "mEndPoint": {
+        "count": 1,
+        "delay": 0,
+        "duration": 0,
+        "gravity": 0,
+        "index": 0,
+        "x": 1617,
+        "y": 758
+      },
+      "mStartPoint": {
+        "count": 1,
+        "delay": 0,
+        "duration": 0,
+        "gravity": 0,
+        "index": 0,
+        "x": 1624,
+        "y": 581
+      }
+    },
+    "type": 1
+  }
+]
