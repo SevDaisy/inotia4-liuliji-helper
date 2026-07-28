@@ -35,6 +35,12 @@ class Point:
     def __repr__(self):
         return f"({self.x},{self.y})"
 
+    @classmethod
+    def from_str(cls, s: str):
+        s = s.strip('()')
+        x_str, y_str = s.split(',')
+        return cls(int(x_str.strip()), int(y_str.strip()))
+
 
 def with_delay(func):
     """装饰器：在执行核心操作前后插入延迟"""
