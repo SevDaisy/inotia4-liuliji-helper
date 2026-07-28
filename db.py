@@ -2,7 +2,7 @@ from ascript.android.system import R
 
 import os
 
-from .constrants import Point, imgFind, toast
+from .constrants import Point, imgFind, imgFindAll, toast
 
 RootDir = R.sd("/AScript/inotia4/")
 
@@ -27,9 +27,8 @@ DataList = [
     # 游戏内直接可见
     "平A", "菜单",
     # 菜单页可见
-    "背包菜单", "主菜单",
+    "背包菜单", "主菜单", "上一级"
     # 背包页可见, 左上00, 右上04, 右下33
-    "背包分格"
     "背包页1", "背包页2", "背包页3", "背包页4", "背包页5",
     "背包格11", "背包格21"
     # 条件可见
@@ -38,7 +37,25 @@ DataList = [
 
 
 def Initialize(name):
+    res = None
     if name == "强化成功":
         res = imgFind("确认")
-        if res is not None:
-            save("强化成功", res, "point")
+    elif name in ["平A", "菜单", "背包菜单", "主菜单", "上一级", "确认"]:
+        res = imgFind(name)
+    if res is not None:
+        save(name, res, prefix="point")
+        return
+
+    if name == "背包分格":
+        # res = imgFindAll("背包页")
+        # for i, p in enumerate(res):
+        #     save(f"背包页{i+1}", p, prefix="point")
+        res = imgFindAll("背包分格")
+        res.sort(key=lambda p: (p.x, p.y))
+
+        def avg(a, b):
+            return int((a+b)/2)
+        s04 = Point(avg(res[0].x, res[4].x), avg(res[0].y, res[4].y))
+        s46 = Point(avg(res[4].x, res[6].x), avg(res[4].y, res[6].y))
+        save("背包分格21", s04, prefix="point")
+        save("背包分格22", s46, prefix="point")
