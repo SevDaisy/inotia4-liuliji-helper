@@ -50,7 +50,7 @@ def with_delay(func):
             time.sleep(before*MilliSeconds)
         # result = ""
         result = func(*args, **kwargs)
-        msg = f"->{str(args)} {str(kwargs)}" if msg == "" else msg
+        msg = f"{func.__name__}({str(args)},{str(kwargs)})" if msg == "" else msg
         Dialog.toast(msg, dur=1000)
         print(msg)
         if after > 0:
@@ -96,6 +96,14 @@ def imgFind(part, full=None):
         full = pin()
     res = FindImages.find_template(R.img(f"{part}.png"))
     return None if res is None else Point(res[cx], res[cy])
+
+
+@with_delay
+def imgFindAll(part, full=None):
+    if full is None:
+        full = pin()
+    res = FindImages.find_all_template(R.img(f"{part}.png"))
+    return None if res is None else [Point(item[cx], item[cy]) for item in res]
 
 
 @with_delay
