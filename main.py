@@ -1,5 +1,11 @@
 from .constrants import *
 
-now = pin(True)
+# res = FindImages.find_template(R.img(f"{part}.png"))
 
-doClick(2460, 1000, before=1000, after=1000)
+
+pBack = imgFind("上一级")
+if pBack is None:
+    toast("找不到 上一级")
+    # exit()
+
+pClick(pBack)

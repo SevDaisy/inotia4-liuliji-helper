@@ -2,3 +2,5 @@
 example
 README.md
 .vscode/.ascript-sync.json
+auto/*
+!auto/000_gen.py
