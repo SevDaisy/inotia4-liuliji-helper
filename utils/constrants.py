@@ -1,22 +1,14 @@
-# from esp32 import BleDevice
-from ascript.android import screen
-from ascript.android.action import click, slide, Touch, gesture
-# 导入控件检索相关
-from ascript.android.node import Selector
-# 导入图色相关
-from ascript.android.screen import capture, FindColors, FindImages, Ocr
-# 导入系统相关
-from ascript.android import system
-# 环境设备相关
-from ascript.android.system import R, Device
-# 模拟动作相关
-from ascript.android import action
-# 对话框
-from ascript.android.ui import Dialog
 
-
-import time
 import sys
+import time
+
+import cv2
+from ascript.android import action, screen, system
+from ascript.android.action import Touch, click, gesture, slide
+from ascript.android.node import Selector
+from ascript.android.screen import FindColors, FindImages, Ocr, capture
+from ascript.android.system import Device, R
+from ascript.android.ui import Dialog
 
 # 全局变量声明
 cx = 'center_x'
@@ -37,25 +29,54 @@ class Point:
 
     @classmethod
     def from_str(cls, s: str):
-        s = s.strip('()')
+        s = s.strip('()').replace(" ", "")
         x_str, y_str = s.split(',')
         return cls(int(x_str.strip()), int(y_str.strip()))
+
+    def __lt__(self, other):
+        if self.y != other.y:
+            return self.y < other.y
+        return self.x < other.x
+
+
+class Rect:
+    def __init__(self, x1: int, y1: int, x2: int, y2: int):
+        self.x1 = x1
+        self.y1 = y1
+        self.x2 = x2
+        self.y2 = y2
+
+    def __str__(self):
+        return f"({self.x1},{self.y1},{self.x2},{self.y2})"
+
+    def __repr__(self):
+        return f"({self.x1},{self.y1},{self.x2},{self.y2})"
+
+    @classmethod
+    def from_str(cls, s: str):
+        s = s.strip('()').replace(" ", "")
+        x1_str, y1_str, x2_str, y2_str = s.split(',')
+        return cls(int(x1_str.strip()), int(y1_str.strip()), int(x2_str.strip()), int(y2_str.strip()))
+
+    def center(self):
+        return Point(int((self.x1 + self.x2) / 2), int((self.y1 + self.y2) / 2))
+
+    def asList(self):
+        return [self.x1, self.y1, self.x2, self.y2]
 
 
 def with_delay(func):
     """装饰器：在执行核心操作前后插入延迟"""
     def wrapper(*args, before=0, after=0, msg="", ** kwargs):
+        if msg == "":
+            print(f"{func.__name__}({str(args)},{str(kwargs)})")
+        else:
+            toast(msg, duration=1000)
         if before > 0:
             # print(f"执行前等待 {before} 毫秒")
             time.sleep(before*MilliSeconds)
         # result = ""
         result = func(*args, **kwargs)
-
-        if msg == "":
-            print(f"{func.__name__}({str(args)},{str(kwargs)})")
-        else:
-            toast(msg, duration=1000)
-
         if after > 0:
             # print(f"执行前等待 {after} 毫秒")
             time.sleep(after*MilliSeconds)
@@ -128,3 +149,28 @@ def pClick(p: Point, dur=20):
 @with_delay
 def pSlide(start: Point, end: Point, dur=300):
     return action.slide(start.x, start.y, end.x, end.y, dur)
+
+
+def test():
+    img = screen.capture_cv()
+    img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+
+    res = FindImages.find_all_template(
+        R.img("高级宝石灰.png"),
+        rect=[1390, 246, 2193, 1007],
+        confidence=0.8, image=img)
+
+    if res is None:
+        print("未找到")
+        return
+    px = []
+    for i, item in enumerate(res):
+        # print(f"{i}: {Point(item[cx], item[cy])}")
+        px.append(Point(item[cx], item[cy]))
+
+    px.sort()
+    i = 0
+    for p in px:
+        pClick(p, 500, msg=f"{i}: {p}")
+        i += 1
+    pass
