@@ -50,9 +50,12 @@ def with_delay(func):
             time.sleep(before*MilliSeconds)
         # result = ""
         result = func(*args, **kwargs)
-        msg = f"{func.__name__}({str(args)},{str(kwargs)})" if msg == "" else msg
-        Dialog.toast(msg, dur=1000)
-        print(msg)
+
+        if msg == "":
+            print(f"{func.__name__}({str(args)},{str(kwargs)})")
+        else:
+            toast(msg, duration=1000)
+
         if after > 0:
             # print(f"执行前等待 {after} 毫秒")
             time.sleep(after*MilliSeconds)
@@ -70,6 +73,7 @@ def pin(debug=False):
 
 def toast(msg, duration=1000):
     Dialog.toast(msg, duration)
+    print(msg)
 
 
 def exit(code=0):
@@ -86,7 +90,7 @@ def ocrFind(txt: str, img=None, debug=False):
 
     if img is None:
         img = pin()
-    res = Ocr.find(text=txt, image=img)
+    res = Ocr.mlkitocr_v2(pattern=txt, image=img)
     return None if res is None else Point(res[cx], res[cy])
 
 
