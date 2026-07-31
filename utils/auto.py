@@ -6,6 +6,7 @@ from ascript.android import action, screen
 from ascript.android.screen import FindImages, Ocr
 from ascript.android.system import Device, R
 from ascript.android.ui import Dialog
+import PaddleOcrV5
 
 # 全局变量声明
 cx = 'center_x'
@@ -63,10 +64,10 @@ class Rect:
 
 
 def with_delay(func):
-    """装饰器：在执行核心操作前后插入延迟"""
+    """装饰器：在执行核心操作前后插入延迟, 并支持日志和弹窗"""
     def wrapper(*args, before=0, after=0, msg="", ** kwargs):
         if msg == "":
-            print(f"\t\t\t\t{func.__name__}({str(args)},{str(kwargs)})")
+            print("\t"*8 + f"{func.__name__}({str(args)},{str(kwargs)})")
         else:
             toast(msg, duration=1000)
         if before > 0:
@@ -78,16 +79,22 @@ def with_delay(func):
     return wrapper
 
 
-def pin(debug=False, rect=Rect):
+def pin(rect=None):
     now = None
     if rect is None:
         now = screen.capture()
     else:
         now = screen.capture(rect.x1, rect.y1, rect.x2, rect.y2)
-    # screen.bitmap_to_file(R.sd("1.png"), now)
-    if debug:
-        print(now)
     return now
+
+
+def pinGray(rect=None):
+    now = None
+    if rect is None:
+        now = screen.capture_cv()
+    else:
+        now = screen.capture_cv(rect.x1, rect.y1, rect.x2, rect.y2)
+    return cv2.cvtColor(now, cv2.COLOR_BGR2GRAY)
 
 
 def toast(msg, duration=1000):
@@ -110,13 +117,29 @@ def ocrGet(rect=None, img=None):
         res = Ocr.mlkitocr_v2(image=img, rect=rect.asList())
     return None if res is None else [x.text for x in res]
 
+@with_delay
+def ocrPaddle_V5(rect=None,img=None):
+    if img is None:
+        img=pin()
+    if rect is None:
+        res = PaddleOcrV5.detect(image=img)
+    else:
+        res = PaddleOcrV5.detect(image=img, rect=rect.asList())
+        print(res)
+    return None if res is None else [x['text'] for x in res]
+
 
 @with_delay
-def ocrFind(txt: str, img=None):
+def ocrFind(pattern: str, img=None):
+    """ 模式匹配，返回匹配到的中心位置 """
     if img is None:
         img = pin()
-    res = Ocr.mlkitocr_v2(pattern=txt, image=img)
-    return None if res is None else Point(res[cx], res[cy])
+    res = Ocr.mlkitocr_v2(pattern=pattern, image=img)
+    res = None if res is None else [
+        Point(item.center_x, item.center_y) for item in res].sort()
+    print(res)
+    return res
+
 
 
 @with_delay
@@ -138,8 +161,7 @@ def imgFindAll(part, full=None):
 @with_delay
 def imgFindGray(part, rect, full=None):
     if full is None:
-        full = pin()
-    full = cv2.cvtColor(full, cv2.COLOR_BGR2GRAY)
+        full = pinGray()
     res = FindImages.find_all_template(
         R.img(f"{part}.png"),
         rect=rect,

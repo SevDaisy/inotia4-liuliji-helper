@@ -8,4 +8,4 @@ from .utils.model import GemLevel
 
 # print("main OK")
 
-SL宝石(saveIndex=1, target=GemLevel.混沌)
+SL宝石(saveIndex=1, target=GemLevel.顶级)
