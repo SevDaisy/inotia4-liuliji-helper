@@ -1,13 +1,18 @@
-from ..utils.constrants import imgFind, pClick, pSlide, toast
-from ..utils.db import loadPoint
+from ..utils.auto import ocrGet, pClick, pSlide, pin, toast
+from ..utils.db import loadPoint, loadRect
+from ..utils.model import Gem, GemLevel
 
 
 # saveIndex: 第几个存档
 # target: 融合到几级宝石：[中级|高级|顶级|混沌]
-def SL宝石(saveIndex=1, level=0):
+def SL宝石(saveIndex=1, target=GemLevel.混沌):
+    min = 100
     short = 200
     long = 700
     v = {}
+    r = {}
+    r["属性文本"] = loadRect("融合器-宝石属性文本")
+    r["评级文本"] = loadRect("融合器-宝石评级文本")
     for item in [
         # 退出重进
             "菜单", "上一级", "主菜单页", "主菜单选项", "返回主菜单-是", "开始游戏", "跳过登录-否", f"存档{saveIndex}",
@@ -16,6 +21,10 @@ def SL宝石(saveIndex=1, level=0):
             "宝石材料位1", "宝石材料位2", "宝石材料位3", "宝石材料添加", "融合器-确认融合", "融合器-确认融合-是", "融合器-融合成功-确认",
         # 辅助按键
             "背包页1", "背包页2", "背包页3", "背包页4", "背包页5",
+            "背包格00", "背包格01", "背包格02", "背包格03",
+            "背包格10", "背包格11", "背包格12", "背包格13",
+            "背包格20", "背包格21", "背包格22", "背包格23",
+            "背包格30", "背包格31", "背包格32", "背包格33",
         # 保存
             "马上存档", "马上存档-确认"
     ]:
@@ -27,58 +36,52 @@ def SL宝石(saveIndex=1, level=0):
             return
 
     def 重新登录():
-        # 点击 主菜单页
         pClick(v["主菜单页"], before=long, msg="打开主菜单页")
-        # 点击 主菜单选项
         pClick(v["主菜单选项"], before=short, msg="点击主菜单选项")
-        # 点击 是 (返回主菜单-是)
         pClick(v["返回主菜单-是"], before=short, msg="点击返回主菜单-是")
-        # 点击 开始游戏
         pClick(v["开始游戏"], before=long, msg="点击开始游戏")
-        # 点击 否 (跳过登录-否)
         pClick(v["跳过登录-否"], before=short, msg="点击跳过登录-否")
-        # 点击 存档{saveIndex}
-        pClick(v[f"存档{saveIndex}"], before=long, msg=f"点击存档{saveIndex}")
-        # 点击 菜单
-        pClick(v["菜单"], before=long, msg="打开菜单")
-
-    def 打开背包():
-        # 点击 背包菜单
-        pClick(v["背包菜单"], before=short, msg="打开背包")
-        # 点击 背包页{packIndex}
-        if 1 < packIndex < 5:
-            pClick(v[f"背包页{packIndex}"], before=short, msg=f"打开第{packIndex}背包")
+        pClick(
+            v[f"存档{saveIndex}"],
+            before=long, after=long,
+            msg=f"点击存档{saveIndex}"
+        )
 
     def 确认并保存():
-        # 点击 强化成功
-        pClick(v["强化成功"])
-        # 点击 主菜单页
-        pClick(v["主菜单页"], before=short, msg="打开主菜单")
-        # 点击 保存选项
-        pClick(v["保存选项"], before=short, msg="点击保存")
-        # 点击 确认保存
-        pClick(v["确认保存"], before=short, msg="点击确认保存")
+        pClick(v["上一级"], before=short, msg="退出宝石强化界面")
+        pClick(v["上一级"], before=short, msg="退出融合器界面")
+        pClick(v["马上存档"], before=short, msg="存个档")
+        pClick(v["马上存档-确认"], before=short)
 
+    def 进入宝石强化界面():
+        pClick(v["平A"], before=short, msg="打开融合器")
+        pClick(v["融合器-宝石强化"], before=short, msg="打开宝石强化界面")
+
+    # 进入宝石强化界面()
+
+    # 整理背包, 录入当前已有宝石
+    gList = []
+    record = [False] * 80
+    i = 0
     cnt = 0
-    success = 0
-    while maxRetry <= 0 or cnt < maxRetry:
-        while success < maxSuccess:
-            pSlide(v["背包格21"], v["背包格22"], before=short)
-            confirm = imgFind("确认", before=long)
-            # 没强化成功, 则重新登录再来
-            if confirm is None:
-                toast("下次一定", duration=1000)
-                break
-            success += 1
-            toast(f"失败 {cnt} 次, 成功 {success} 次")
-            确认并保存()
-            打开背包()
-        # 强化满了 退出
-        if success >= maxSuccess:
-            break
-        cnt += 1
-        toast(f"失败 {cnt} 次, 成功 {success} 次")
-        重新登录()
-        打开背包()
-
-    pClick(v["背包格22"], before=short, msg="打开背包")
+    for page in range(4, 5):
+        pClick(v[f"背包页{page+1}"], before=short, msg=f"打开背包页 {page+1}")
+        for row in range(4):
+            for col in range(4):
+                i += 1
+                pClick(v[f"背包格{row}{col}"], before=min, after=min)
+                img评级 = pin(rect=r["评级文本"])
+                img属性 = pin(rect=r["属性文本"])
+                txt = ocrGet(img=img评级)
+                level = None
+                if txt is not None and " ".join(txt).endswith("宝石"):
+                    level = GemLevel.from_str(" ".join(txt)[:-2])
+                if level is None:
+                    continue
+                txt = ocrGet(img=img属性)
+                if txt is None:
+                    toast("异常! 没读到宝石属性")
+                    continue
+                cnt += 1
+                gList.append(Gem(i-1, level, Gem.Data(" ".join(txt))))
+                toast(f"第 {cnt} 颗, {gList[cnt-1]}")

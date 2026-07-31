@@ -1,12 +1,9 @@
-
 import sys
 import time
 
 import cv2
-from ascript.android import action, screen, system
-from ascript.android.action import Touch, click, gesture, slide
-from ascript.android.node import Selector
-from ascript.android.screen import FindColors, FindImages, Ocr, capture
+from ascript.android import action, screen
+from ascript.android.screen import FindImages, Ocr
 from ascript.android.system import Device, R
 from ascript.android.ui import Dialog
 
@@ -69,24 +66,25 @@ def with_delay(func):
     """装饰器：在执行核心操作前后插入延迟"""
     def wrapper(*args, before=0, after=0, msg="", ** kwargs):
         if msg == "":
-            print(f"{func.__name__}({str(args)},{str(kwargs)})")
+            print(f"\t\t\t\t{func.__name__}({str(args)},{str(kwargs)})")
         else:
             toast(msg, duration=1000)
         if before > 0:
-            # print(f"执行前等待 {before} 毫秒")
             time.sleep(before*MilliSeconds)
-        # result = ""
         result = func(*args, **kwargs)
         if after > 0:
-            # print(f"执行前等待 {after} 毫秒")
             time.sleep(after*MilliSeconds)
         return result
     return wrapper
 
 
-def pin(debug=False):
-    now = screen.capture()
-    screen.bitmap_to_file(R.sd("1.png"), now)
+def pin(debug=False, rect=Rect):
+    now = None
+    if rect is None:
+        now = screen.capture()
+    else:
+        now = screen.capture(rect.x1, rect.y1, rect.x2, rect.y2)
+    # screen.bitmap_to_file(R.sd("1.png"), now)
     if debug:
         print(now)
     return now
@@ -102,13 +100,19 @@ def exit(code=0):
 
 
 @with_delay
-def ocrFind(txt: str, img=None, debug=False):
-    """
-    在屏幕上查找文字，返回第一个匹配结果。
-    :param txt: 指定查找文本, img: 传入源图, None=自动截屏
-    :return: dict {text, rect, center_x, center_y, confidence} 或 None
-    """
+def ocrGet(rect=None, img=None):
+    res = None
+    if img is None:
+        img = pin()
+    if rect is None:
+        res = Ocr.mlkitocr_v2(image=img)
+    else:
+        res = Ocr.mlkitocr_v2(image=img, rect=rect.asList())
+    return None if res is None else [x.text for x in res]
 
+
+@with_delay
+def ocrFind(txt: str, img=None):
     if img is None:
         img = pin()
     res = Ocr.mlkitocr_v2(pattern=txt, image=img)
@@ -128,7 +132,19 @@ def imgFindAll(part, full=None):
     if full is None:
         full = pin()
     res = FindImages.find_all_template(R.img(f"{part}.png"))
-    return None if res is None else [Point(item[cx], item[cy]) for item in res]
+    return None if res is None else [Point(item[cx], item[cy]) for item in res].sort()
+
+
+@with_delay
+def imgFindGray(part, rect, full=None):
+    if full is None:
+        full = pin()
+    full = cv2.cvtColor(full, cv2.COLOR_BGR2GRAY)
+    res = FindImages.find_all_template(
+        R.img(f"{part}.png"),
+        rect=rect,
+        confidence=0.8, image=full)
+    return None if res is None else [Point(item[cx], item[cy]) for item in res].sort()
 
 
 @with_delay
@@ -149,28 +165,3 @@ def pClick(p: Point, dur=20):
 @with_delay
 def pSlide(start: Point, end: Point, dur=300):
     return action.slide(start.x, start.y, end.x, end.y, dur)
-
-
-def test():
-    img = screen.capture_cv()
-    img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-
-    res = FindImages.find_all_template(
-        R.img("高级宝石灰.png"),
-        rect=[1390, 246, 2193, 1007],
-        confidence=0.8, image=img)
-
-    if res is None:
-        print("未找到")
-        return
-    px = []
-    for i, item in enumerate(res):
-        # print(f"{i}: {Point(item[cx], item[cy])}")
-        px.append(Point(item[cx], item[cy]))
-
-    px.sort()
-    i = 0
-    for p in px:
-        pClick(p, 500, msg=f"{i}: {p}")
-        i += 1
-    pass

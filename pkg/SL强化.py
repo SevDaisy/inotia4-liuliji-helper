@@ -1,4 +1,4 @@
-from ..utils.constrants import imgFind, pClick, pSlide, toast
+from ..utils.auto import imgFind, pClick, pSlide, toast
 from ..utils.db import loadPoint
 
 

@@ -2,7 +2,7 @@ import os
 
 from ascript.android.system import R
 
-from .constrants import Point, Rect, imgFind, imgFindAll, toast
+from .auto import Point, Rect, toast
 
 # 手动路径, 与自更新环境隔离, 避免重复运行导致的缓存被覆盖
 # RootDir = R.sd("/AScript/inotia4/")

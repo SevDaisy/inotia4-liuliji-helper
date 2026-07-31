@@ -3,6 +3,9 @@
 # SL强化(saveIndex=1, packIndex=4, maxRetry=0, maxSuccess=12)
 
 
-from .utils.constrants import test
+from .pkg.SL宝石 import SL宝石
+from .utils.model import GemLevel
 
-test()
+# print("main OK")
+
+SL宝石(saveIndex=1, target=GemLevel.混沌)
