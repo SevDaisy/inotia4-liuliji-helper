@@ -57,7 +57,7 @@ def SL强化(saveIndex=1, packIndex=1, maxRetry=15, maxSuccess=15):
     success = 0
     while maxRetry <= 0 or cnt < maxRetry:
         while success < maxSuccess:
-            pSlide(v["背包格21"], v["背包格22"], before=short)
+            pSlide(v["背包格11"], v["背包格12"], before=short)
             confirm = imgFind("确认", before=long)
             # 没强化成功, 则重新登录再来
             if confirm is None:

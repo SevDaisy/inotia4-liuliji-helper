@@ -215,29 +215,61 @@ if __name__ == "__main__":
             return idx-1
         ds = [
             Gem(CNT(), GemLevel.低级, Entry(EntryKind.力量, 100)),
-            Gem(CNT(), GemLevel.中级, Entry(EntryKind.暴击, 100)),
-            Gem(CNT(), GemLevel.中级, Entry(EntryKind.暴击, 0.01)),
-            Gem(CNT(), GemLevel.中级, Entry(EntryKind.暴击, 1.6*0.01)),
-            Gem(CNT(), GemLevel.高级, Entry(EntryKind.暴伤增加, 100)),
-            Gem(CNT(), GemLevel.高级, Entry(EntryKind.暴伤增加, 0.01)),
-            Gem(CNT(), GemLevel.顶级, Entry(EntryKind.闪避, 100)),
-            Gem(CNT(), GemLevel.顶级, Entry(EntryKind.闪避, 0.01)),
-            Gem(CNT(), GemLevel.低级, Entry(EntryKind.MP回复, 100)),
-            Gem(CNT(), GemLevel.低级, Entry(EntryKind.MP回复, 0.01)),
-            Gem(CNT(), GemLevel.低级, Entry(EntryKind.暴伤增加, 0.101)),
+            Gem(CNT(), GemLevel.低级, Entry(EntryKind.暴击, 0.01)),
+            Gem(CNT(), GemLevel.低级, Entry(EntryKind.暴击, 0.05)),
+            Gem(CNT(), GemLevel.低级, Entry(EntryKind.暴击, 0.06)),
+            Gem(CNT(), GemLevel.低级, Entry(EntryKind.暴击, 0.07)),
+            Gem(CNT(), GemLevel.低级, Entry(EntryKind.暴击, 0.08)),
+            Gem(CNT(), GemLevel.低级, Entry(EntryKind.暴击, 0.085)),
+            Gem(CNT(), GemLevel.低级, Entry(EntryKind.命中, 0.01)),
+            Gem(CNT(), GemLevel.低级, Entry(EntryKind.命中, 0.05)),
+            Gem(CNT(), GemLevel.低级, Entry(EntryKind.命中, 0.06)),
+            Gem(CNT(), GemLevel.低级, Entry(EntryKind.命中, 0.07)),
+            Gem(CNT(), GemLevel.低级, Entry(EntryKind.命中, 0.08)),
+            Gem(CNT(), GemLevel.低级, Entry(EntryKind.命中, 0.085)),
+            Gem(CNT(), GemLevel.低级, Entry(EntryKind.暴伤增加, 0.01)),
+            Gem(CNT(), GemLevel.低级, Entry(EntryKind.暴伤增加, 0.09)),
+            Gem(CNT(), GemLevel.低级, Entry(EntryKind.暴伤增加, 0.10)),
+            Gem(CNT(), GemLevel.低级, Entry(EntryKind.暴伤增加, 0.11)),
+            Gem(CNT(), GemLevel.低级, Entry(EntryKind.暴伤增加, 0.12)),
+            Gem(CNT(), GemLevel.低级, Entry(EntryKind.暴伤增加, 0.13)),
+            Gem(CNT(), GemLevel.低级, Entry(EntryKind.暴伤增加, 0.135)),
+            Gem(CNT(), GemLevel.低级, Entry(EntryKind.闪避, 0.01)),
+            Gem(CNT(), GemLevel.低级, Entry(EntryKind.闪避, 0.02)),
+            Gem(CNT(), GemLevel.低级, Entry(EntryKind.闪避, 0.03)),
+            Gem(CNT(), GemLevel.低级, Entry(EntryKind.闪避, 0.033)),
+            Gem(CNT(), GemLevel.低级, Entry(EntryKind.闪避, 0.035)),
+            Gem(CNT(), GemLevel.低级, Entry(EntryKind.闪避, 0.04)),
+            Gem(CNT(), GemLevel.低级, Entry(EntryKind.魔抗, 0.01)),
+            Gem(CNT(), GemLevel.低级, Entry(EntryKind.魔抗, 0.02)),
+            Gem(CNT(), GemLevel.低级, Entry(EntryKind.魔抗, 0.03)),
+            Gem(CNT(), GemLevel.低级, Entry(EntryKind.魔抗, 0.033)),
+            Gem(CNT(), GemLevel.低级, Entry(EntryKind.魔抗, 0.035)),
+            Gem(CNT(), GemLevel.低级, Entry(EntryKind.魔抗, 0.04)),
+            Gem(CNT(), GemLevel.低级, Entry(EntryKind.MP回复, 3)),
+            Gem(CNT(), GemLevel.低级, Entry(EntryKind.MP回复, 4)),
+            Gem(CNT(), GemLevel.低级, Entry(EntryKind.MP回复, 5)),
         ]
 
         f = GemFilter([
-            Entry.from_str("暴击率: 5%"),  # 顶7混8.5
-            Entry.from_str("命中率: 5%"),  # 顶7混8.5
-            Entry.from_str("暴击伤害增加率: 9%"),  # 顶12混13.5
+            # Entry.from_str("暴击率: 5%"),  # 顶7混8.5
+            # Entry.from_str("命中率: 5%"),  # 顶7混8.5
+            # Entry.from_str("暴击伤害增加率: 9%"),  # 顶12混13.5
+            # Entry.from_str("魔法抵抗率: 3%"),  # 顶3.4混4
+            # Entry.from_str("MP恢复: 4"),  # 顶4混5
+            Entry.from_str("暴击率: 6%"),  # 顶7混8.5
+            Entry.from_str("命中率: 6%"),  # 顶7混8.5
+            Entry.from_str("暴击伤害增加率: 10%"),  # 顶12混13.5
             Entry.from_str("魔法抵抗率: 3%"),  # 顶3.4混4
             Entry.from_str("MP恢复: 4"),  # 顶4混5
         ])
         print(f.kindNeed)
         print(f.valueMin)
-        for g in f.apply(ds):
-            print(f"f.check({g}) -> {f.check(g)}")
+        # for g in f.apply(ds):
+        #     print(f"f.check({g}) -> {f.check(g)}")
+        for g in ds:
+            if f.check(g):
+                print(f"f.check({g}) -> {f.check(g)}")
 
     def testEntryParse():
         for s in [
@@ -278,8 +310,8 @@ if __name__ == "__main__":
         print(f"empty:{empty}, p:{page}, r:{row}, c:{col}")
         print(f"empty:{empty}, p:{page}, r:{row}, c:{col}")
 
-    testIsEmpty()
+    # testIsEmpty()
     # testLocation()
-    # testGemFilter()
+    testGemFilter()
     # testEntryParse()
     pass
