@@ -1,6 +1,6 @@
 # from .pkg.SL强化 import SL强化
 
-# SL强化(saveIndex=1, packIndex=4, maxRetry=0, maxSuccess=12)
+# SL强化(saveIndex=1, packIndex=1)
 
 
 from .pkg.SL宝石 import SL宝石

@@ -5,7 +5,7 @@ from ..utils.db import loadPoint
 # saveIndex: 第几个存档
 # packIndex: 第几个背包
 # loopTimes: <=0 无限循环
-def SL强化(saveIndex=1, packIndex=1, maxRetry=15, maxSuccess=15):
+def SL强化(saveIndex=1, packIndex=1, maxRetry=0, maxSuccess=15):
     short = 200
     long = 700
     v = {}
