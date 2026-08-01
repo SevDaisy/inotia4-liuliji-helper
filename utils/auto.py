@@ -117,10 +117,11 @@ def ocrGet(rect=None, img=None):
         res = Ocr.mlkitocr_v2(image=img, rect=rect.asList())
     return None if res is None else [x.text for x in res]
 
+
 @with_delay
-def ocrPaddle_V5(rect=None,img=None):
+def ocrPaddle_V5(rect=None, img=None):
     if img is None:
-        img=pin()
+        img = pin()
     if rect is None:
         res = PaddleOcrV5.detect(image=img)
     else:
@@ -139,7 +140,6 @@ def ocrFind(pattern: str, img=None):
         Point(item.center_x, item.center_y) for item in res].sort()
     print(res)
     return res
-
 
 
 @with_delay

@@ -1,4 +1,5 @@
 from enum import Enum
+from typing import Optional
 
 
 class EntryKind(Enum):
@@ -76,9 +77,9 @@ class Entry:
             try:
                 return float(s)  # 尝试浮点数
             except ValueError:
-                if s.endswith('%'):
+                if '%' in s:
                     try:
-                        return float(s[:-1]) / 100  # 处理百分数
+                        return float(s.replace('%', '')) / 100  # 处理百分数
                     except ValueError:
                         print(f"警告: 无法解析百分数字符串 '{s}'，返回 0.0")
                         return 0.0
@@ -88,7 +89,7 @@ class Entry:
 
     @classmethod
     def from_str(cls, s: str):
-        s=translated(s)
+        s = translated(s)
         tmp = s.split(":")
         if len(tmp) < 2:
             return Entry(EntryKind.错误, 0)
@@ -129,20 +130,14 @@ class GemLevel(Enum):
 class Gem:
     def __init__(self, index: int, level: GemLevel, data: Entry):
         self.index = index  # 在背包中的位置, 理论合法值 0~79
-        self.kind = level
+        self.level = level
         self.data = data
 
     def isLevel(self, level: int):
-        return self.kind == Gem(level)
-
-    def location(self):
-        page = int(self.index / 16)
-        row = int(int(self.index % 16)/4)
-        col = self.index - page * 16 - row * 4
-        return page+1, row, col
+        return self.level == Gem(level)
 
     def __str__(self):
-        return f"{self.kind.name}宝石{self.index} {self.data}"
+        return f"{self.level.name}宝石{self.index} {self.data}"
 
     def __repr__(self):
         return self.__str__()
@@ -180,20 +175,17 @@ class GemFilter:
             self.kindNeed[kind] = False
             self.valueMin[kind] = 0
 
+    def check(self, gem: Optional[Gem] = None) -> bool:
+        """ true 说明宝石足够好 """
+        return self.kindNeed.get(gem.data.kind, False) and gem.data.value >= self.valueMin.get(gem.data.kind, 0)
+
     def apply(self, gems: list):
         """ 去掉足够优秀的宝石 """
         res = [
             gem for gem in gems
-            if not self.kindNeed.get(gem.data.kind, False)
-            or gem.data.value >= self.valueMin.get(gem.data.kind, 0)
+            if not self.check(gem)
         ]
-
-        print(res)
         return res
-
-    def check(self, gem: None) -> bool:
-        """ true 说明宝石足够好 """
-        return self.kindNeed.get(gem.kind, False) and gem.data.value >= self.valueMin.get(gem.kind, 0)
 
 
 def translated(s: str) -> str:
@@ -204,33 +196,48 @@ def translated(s: str) -> str:
     }
     return s.translate(trans)
 
+
+def pkgLocation(idx: int):
+    """ 传入背包格序号, 返回背包格位置 """
+    page = int(idx / 16)
+    row = int(int(idx % 16)/4)
+    col = idx - page * 16 - row * 4
+    return page+1, row, col
+
+
 if __name__ == "__main__":
     def testGemFilter():
+        idx = 0
+
+        def CNT():
+            nonlocal idx
+            idx += 1
+            return idx-1
         ds = [
-            Gem(0, GemLevel.低级, Entry(EntryKind.力量, 100)),
-            Gem(1, GemLevel.中级, Entry(EntryKind.暴击, 100)),
-            Gem(1, GemLevel.中级, Entry(EntryKind.暴击, 0.01)),
-            Gem(1, GemLevel.中级, Entry(EntryKind.暴击, 1.6*0.01)),
-            Gem(2, GemLevel.高级, Entry(EntryKind.暴伤增加, 100)),
-            Gem(2, GemLevel.高级, Entry(EntryKind.暴伤增加, 0.01)),
-            Gem(3, GemLevel.顶级, Entry(EntryKind.闪避, 100)),
-            Gem(3, GemLevel.顶级, Entry(EntryKind.闪避, 0.01)),
-            Gem(4, GemLevel.低级, Entry(EntryKind.MP回复, 100)),
-            Gem(4, GemLevel.低级, Entry(EntryKind.MP回复, 0.01)),
+            Gem(CNT(), GemLevel.低级, Entry(EntryKind.力量, 100)),
+            Gem(CNT(), GemLevel.中级, Entry(EntryKind.暴击, 100)),
+            Gem(CNT(), GemLevel.中级, Entry(EntryKind.暴击, 0.01)),
+            Gem(CNT(), GemLevel.中级, Entry(EntryKind.暴击, 1.6*0.01)),
+            Gem(CNT(), GemLevel.高级, Entry(EntryKind.暴伤增加, 100)),
+            Gem(CNT(), GemLevel.高级, Entry(EntryKind.暴伤增加, 0.01)),
+            Gem(CNT(), GemLevel.顶级, Entry(EntryKind.闪避, 100)),
+            Gem(CNT(), GemLevel.顶级, Entry(EntryKind.闪避, 0.01)),
+            Gem(CNT(), GemLevel.低级, Entry(EntryKind.MP回复, 100)),
+            Gem(CNT(), GemLevel.低级, Entry(EntryKind.MP回复, 0.01)),
+            Gem(CNT(), GemLevel.低级, Entry(EntryKind.暴伤增加, 0.101)),
         ]
 
         f = GemFilter([
-            Entry.from_str("暴击率: 6%"),  # 顶7混8.5
-            Entry.from_str("命中率: 6%"),  # 顶7混8.5
-            Entry.from_str("暴击伤害增加率: 10.5%"),  # 顶12混13.5
+            Entry.from_str("暴击率: 5%"),  # 顶7混8.5
+            Entry.from_str("命中率: 5%"),  # 顶7混8.5
+            Entry.from_str("暴击伤害增加率: 9%"),  # 顶12混13.5
             Entry.from_str("魔法抵抗率: 3%"),  # 顶3.4混4
             Entry.from_str("MP恢复: 4"),  # 顶4混5
         ])
         print(f.kindNeed)
         print(f.valueMin)
-        f.apply(ds)
-        print(f"f.check(ds[0]) -> {f.check(ds[0])}")
-        print(f"f.check(ds[1]) -> {f.check(ds[1])}")
+        for g in f.apply(ds):
+            print(f"f.check({g}) -> {f.check(g)}")
 
     def testEntryParse():
         for s in [
@@ -252,11 +259,27 @@ if __name__ == "__main__":
             print(gems[i:i+3])
 
     def testLocation():
-        g = Gem(0, GemLevel.中级, Entry(EntryKind.力量, 1))
-        p, r, c = g.location()
-        print(f"p={p}, r={r}, c={c}")
+        for i in range(32):
+            p, r, c = pkgLocation(i)
+            print(f"p={p}, r={r}, c={c}")
 
+    def testIsEmpty():
+        def firstEmpty(isEmpty: list) -> int:
+            notFound = -1
+            for i in range(0, len(isEmpty)):
+                if isEmpty[i] == '1':
+                    return i
+            return notFound
+        empty = firstEmpty(
+            "00000000000000000000000000000000000001111111000000111111111100000000000000000000"
+        )
+        page, row, col = pkgLocation(empty)
+        print(f"empty:{empty}, p:{page}, r:{row}, c:{col}")
+        print(f"empty:{empty}, p:{page}, r:{row}, c:{col}")
+        print(f"empty:{empty}, p:{page}, r:{row}, c:{col}")
+
+    testIsEmpty()
     # testLocation()
-    testGemFilter()
+    # testGemFilter()
     # testEntryParse()
     pass
