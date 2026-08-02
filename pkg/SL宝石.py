@@ -253,6 +253,7 @@ def SL宝石(gf: GemFilter, saveIndex=1, 背包上界=5, target=GemLevel.顶级,
     # ===============================================================================
     # 保存一下
     退出并保存()
+    loopTimes = 0
     gems = list(gList[target.value-1].values())  # 原材料列表
     if len(gems) <= 2:
         toast("低品质原材料数量不足, 程序退出")
@@ -266,6 +267,7 @@ def SL宝石(gf: GemFilter, saveIndex=1, 背包上界=5, target=GemLevel.顶级,
             进入宝石强化界面()
             选择宝石配方(target)
             添加宝石原料并合成(once)
+            loopTimes += 1
             # 查看合成结果
             pClick(v[f"背包页{page}"], before=min)
             pClick(v[f"背包格{row}{col}"], before=min, after=min)
@@ -280,7 +282,7 @@ def SL宝石(gf: GemFilter, saveIndex=1, 背包上界=5, target=GemLevel.顶级,
             # 合成产物品质检查
             g = Gem(_new, level, data)
             isGood = gf.check(g)
-            toast(f"得到 {g} {'出货!!!' if isGood else 'SL重来'}")
+            toast(f"第 {loopTimes} 次: {g} {'出货!!!' if isGood else 'SL重来'}")
             # 出货了就保存, 退出死循环
             if isGood:
                 for item in once:
