@@ -18,9 +18,8 @@ def SL强化(saveIndex=1, packIndex=1, maxRetry=0, maxSuccess=15, mode="Normal")
             "强化成功", "主菜单页", "保存选项", "确认保存"]:
         v[item] = loadPoint(item)
     for k, p in v.items():
-        # print(f"{k}: {"Not found" if p is None else str(p)}")
         if p is None:
-            toast("有坐标没取到，程序退出")
+            toast(f"坐标 {k} 没取到，程序退出")
             return
 
     def 重新登录并打开菜单():

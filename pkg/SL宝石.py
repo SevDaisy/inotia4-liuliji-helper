@@ -101,9 +101,8 @@ def SL宝石(gf: GemFilter, saveIndex=1, 背包上界=5, target=GemLevel.顶级,
     ]:
         v[item] = loadPoint(item)
     for k, p in v.items():
-        # print(f"{k}: {"Not notFound" if p is None else str(p)}")
         if p is None:
-            toast("有坐标没取到，程序退出")
+            toast(f"坐标 {k} 没取到，程序退出")
             return
 
     def 退出并重新登录():
