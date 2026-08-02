@@ -1,19 +1,21 @@
 {
-	"name": "inotia4",
-	"pip": {
-		"options": ["--timeout", "1000"],
-		"install": [
-			"opencv-python-headless==4.5.1.48",
-			"requests",
-			"pymysql",
-			"numpy",
-			"websocket-client",
-			"pillow",
-			"pandas",
-			"openpyxl",
-            "schedule",
-            "pycryptodome"
-		]
-	},
-    "gp":[]
+  "name": "inotia4",
+  "pip": {
+    "install": [
+      "opencv-python-headless\u003d\u003d4.5.1.48",
+      "requests",
+      "pymysql",
+      "numpy",
+      "websocket-client",
+      "pillow",
+      "pandas",
+      "openpyxl",
+      "schedule",
+      "pycryptodome"
+    ],
+    "options": [
+      "--timeout",
+      "1000"
+    ]
+  }
 }
