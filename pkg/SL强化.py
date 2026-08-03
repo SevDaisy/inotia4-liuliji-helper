@@ -65,7 +65,7 @@ def SL强化(saveIndex=1, packIndex=1, maxRetry=0, maxSuccess=15, mode="Normal")
                 confirm = imgFind("确认", before=long)
                 # 没强化成功, 则重新登录再来
                 if confirm is None:
-                    toast("下次一定", duration=1000)
+                    # toast("下次一定", duration=1000)
                     break
                 success += 1
                 pClick(v["强化成功"])
