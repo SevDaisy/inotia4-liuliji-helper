@@ -23,9 +23,9 @@ gf = GemFilter([
 # SL宝石(gf, saveIndex=1, 背包上界=1, target=GemLevel.顶级, mode="FULL")
 
 # SL宝石(gf, saveIndex=1, 背包上界=3, target=GemLevel.混沌, mode="FULL")
-SL宝石(gf, saveIndex=1, 背包上界=1, target=GemLevel.混沌, mode="FULL")
+# SL宝石(gf, saveIndex=1, 背包上界=3, target=GemLevel.混沌, mode="FULL")
 
 # SL强化(saveIndex=1, packIndex=1, maxSuccess=12)
 # SL强化(saveIndex=1, packIndex=1, mode="混沌卷轴")
 
-# SL孔位(saveIndex=1, packIndex=1, posID="00")
+SL孔位(saveIndex=1, packIndex=1, posID="00", is可强化装备=False)

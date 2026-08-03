@@ -138,7 +138,6 @@ def ocrFind(pattern: str, img=None):
     res = Ocr.mlkitocr_v2(pattern=pattern, image=img)
     res = None if res is None else [
         Point(item.center_x, item.center_y) for item in res].sort()
-    print(res)
     return res
 
 

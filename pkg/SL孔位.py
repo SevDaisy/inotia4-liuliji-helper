@@ -1,9 +1,11 @@
+from xml.etree.ElementTree import tostring
+
 from ..utils.auto import imgFind, ocrFind, ocrGet, ocrPaddle_V5, pClick, pin, toast
 from ..utils.db import loadPoint, loadRect
 from ..utils.model import *
 
 
-def SL孔位(saveIndex=1, packIndex=1, posID="00"):
+def SL孔位(saveIndex=1, packIndex=1, posID="00", is可强化装备=True):
     """
     saveIndex: 游戏的第几个存档位
     """
@@ -13,7 +15,7 @@ def SL孔位(saveIndex=1, packIndex=1, posID="00"):
     long = 700
     v = {}
     r = {}
-    r["孔位数量"] = loadRect("融合器-孔位数量文本")
+    r["孔位数量"] = loadRect("融合器-强化孔位数量" if is可强化装备 else "融合器-饰品孔位数量")
     r["添加按钮"] = loadRect("融合器-添加按钮")
     for item in [
         # 退出重进
@@ -42,25 +44,21 @@ def SL孔位(saveIndex=1, packIndex=1, posID="00"):
         pClick(v["主菜单页"], before=long)
         pClick(v["主菜单选项"], before=short)
         pClick(v["返回主菜单-是"], before=short)
-        pClick(v["开始游戏"], before=long, msg="点击开始游戏")
+        pClick(v["开始游戏"], before=long)
         pClick(v["跳过登录-否"], before=short)
-        pClick(
-            v[f"存档{saveIndex}"],
-            before=long, after=long,
-            msg=f"点击存档{saveIndex}"
-        )
+        pClick(v[f"存档{saveIndex}"], before=long, after=long)
 
     def 退出并保存():
         pClick(v["上一级"], before=short)
         pClick(v["上一级"], before=short)
         pClick(v["马上存档"], before=short)
-        pClick(v["马上存档-确认"], before=short, msg="存个档")
+        pClick(v["马上存档-确认"], before=short)
 
     def 进入宝石孔生成界面():
         pClick(v["平A"], before=short)
         if ocrFind("宝石") is None:
             pClick(v["融合器-道具合成"], before=min)
-        pClick(v["融合器-宝石孔生成"], before=short, msg="打开宝石孔生成界面")
+        pClick(v["融合器-宝石孔生成"], before=short)
 
     cnt = 0
     while True:
@@ -88,6 +86,8 @@ def SL孔位(saveIndex=1, packIndex=1, posID="00"):
                 toast(f"第{cnt}次, 孔位: {res}")
             except ValueError:
                 toast(f"异常文本: {txt[0]}")
+        else:
+            toast("异常: 无法识别孔位数量")
         if res == 4:
             退出并保存()
             break
