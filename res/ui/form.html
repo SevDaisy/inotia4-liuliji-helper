@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, viewport-fit=cover">
+    <style>
+        html,
+        body,
+        #app {
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+    <!-- Import style -->
+    <link rel="stylesheet" href="./vant.css">
+    <!-- Import Vue 3 -->
+    <script src="./vue.global.prod.js"></script>
+    <!-- Import vant -->
+    <script src="./vant.min.js"></script>
+    <!-- Import formCreateMobile -->
+    <script src="./form-create-vant.min.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <form-create-mobile :rule="rule" :option="options" v-model="formData" v-model:api="api"
+            @submit="onSubmit"></form-create-mobile>
+    </div>
+    <script>
+        const STORAGE_KEY = 'fc_form_data_uwc5bq';
+        const CACHE_ENABLED = true;
+        function loadCache()
+        {
+            if (!CACHE_ENABLED) return {};
+            try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}'); } catch (e) { return {}; }
+        }
+        const App = {
+            data()
+            {
+                const options = formCreateMobile.parseJson('{"form":{"labelWidth":"6.2em","colon":false},"submitBtn":{"show":true,"innerText":"提交"},"resetBtn":{"show":false,"innerText":"重置"},"formName":"SL助手","onSubmit":"[[FORM-CREATE-PREFIX-function(t,n){typeof ascript<\\"u\\"&&(ascript.call(\\"submit\\",JSON.stringify(t)),ascript.close())}-FORM-CREATE-SUFFIX]]","onClose":"[[FORM-CREATE-PREFIX-function(t){typeof ascript<\\"u\\"&&(ascript.call(\\"close\\",\\"\\"),ascript.close())}-FORM-CREATE-SUFFIX]]"}');
+                options.resetBtn = { ...options.submitBtn, show: true, type: 'danger', innerText: '关闭', click: () => { ascript.call('close', ''); ascript.close(); } };
+                return {
+                    rule: formCreateMobile.parseJson('[{"type":"fcTitle","props":{"title":"SL助手","size":"h2","align":"center"},"_fc_id":"id_F4hfmscvutw3abc","name":"ref_Fax8mscvutw3acc","_fc_drag_tag":"fcTitle","display":true,"hidden":false},{"type":"vanTabs","style":{"width":"100%"},"children":[{"type":"vanTab","props":{"title":"选项卡"},"_fc_id":"id_Fef2mscvw65dafc","name":"ref_Fhg4mscvw65dagc","_fc_drag_tag":"vanTab","children":[{"type":"select","field":"F5p6mscvzln9arc","title":"选择器","info":"","effect":{"fetch":""},"$required":false,"optionsTo":"props.options","options":[{"text":"选项01","value":"1"},{"text":"选项02","value":"2"},{"text":"选项03","value":"3"}],"_fc_id":"id_Fj1cmscvzln9asc","name":"ref_Flwxmscvzln9atc","_fc_drag_tag":"select","display":true,"hidden":false},{"type":"select","field":"Fuuomscvzk7saoc","title":"选择器","info":"","effect":{"fetch":""},"$required":false,"optionsTo":"props.options","options":[{"text":"选项01","value":"1"},{"text":"选项02","value":"2"},{"text":"选项03","value":"3"}],"_fc_id":"id_Fk1jmscvzk7sapc","name":"ref_F7lkmscvzk7saqc","_fc_drag_tag":"select","display":true,"hidden":false},{"type":"select","field":"Ftywmscw1dfxauc","title":"选择器","info":"","effect":{"fetch":""},"$required":false,"optionsTo":"props.options","options":[{"text":"选项01","value":"1"},{"text":"选项02","value":"2"},{"text":"选项03","value":"3"}],"_fc_id":"id_F0nqmscw1dfxavc","name":"ref_Fukymscw1dfxawc","_fc_drag_tag":"select","display":true,"hidden":false}],"display":true,"hidden":false},{"type":"vanTab","props":{"title":"选项卡"},"_fc_id":"id_Ff3rmscvw65dahc","name":"ref_F0homscvw65daic","_fc_drag_tag":"vanTab","children":[{"type":"switch","field":"Fyt1mscw7eclbvc","title":"SL or noSL","info":"","$required":false,"props":{"activeValue":true,"inactiveValue":false},"_fc_id":"id_F90dmscw7eclbwc","name":"ref_Fb8vmscw7eclbxc","display":true,"hidden":false,"_fc_drag_tag":"switch"},{"type":"select","field":"F3pbmscw2nvvb6c","title":"选择器","info":"","effect":{"fetch":""},"$required":false,"optionsTo":"props.options","options":[{"text":"选项01","value":"1"},{"text":"选项02","value":"2"},{"text":"选项03","value":"3"}],"_fc_id":"id_F0r5mscw2nvvb7c","name":"ref_Fdnomscw2nvvb8c","_fc_drag_tag":"select","display":true,"hidden":false},{"type":"select","field":"Fhjqmscw2srxbcc","title":"选择器","info":"","effect":{"fetch":""},"$required":false,"optionsTo":"props.options","options":[{"text":"选项01","value":"1"},{"text":"选项02","value":"2"},{"text":"选项03","value":"3"}],"_fc_id":"id_F5g4mscw2srxbdc","name":"ref_F0yemscw2srxbec","_fc_drag_tag":"select","display":true,"hidden":false},{"type":"select","field":"F19zmscw2pupb9c","title":"选择器","info":"","effect":{"fetch":""},"$required":false,"optionsTo":"props.options","options":[{"text":"选项01","value":"1"},{"text":"选项02","value":"2"},{"text":"选项03","value":"3"}],"_fc_id":"id_Fuprmscw2pupbac","name":"ref_Fyczmscw2pupbbc","_fc_drag_tag":"select","display":true,"hidden":false},{"type":"tableForm","field":"Fq9kmscw4vznbnc","title":"表格表单","info":"","props":{"columns":[{"label":"目标属性","style":{"width":"auto"},"rule":[{"type":"cascader","field":"F4t9mscwdggdczc","title":"级联选择器","info":"","effect":{"fetch":""},"$required":false,"props":{"options":[{"text":"选项201","value":"1","children":[{"text":"选项101","value":"2","children":[{"text":"选项01","value":"3"},{"text":"选项02","value":"4"},{"text":"选项03","value":"5"}]},{"text":"选项102","value":"6","children":[{"text":"选项01","value":"7"},{"text":"选项02","value":"8"},{"text":"选项03","value":"9"}]},{"text":"选项103","value":"10","children":[{"text":"选项01","value":"11"},{"text":"选项02","value":"12"},{"text":"选项03","value":"13"}]}]},{"text":"选项202","value":"14","children":[{"text":"选项101","value":"15","children":[{"text":"选项01","value":"16"},{"text":"选项02","value":"17"},{"text":"选项03","value":"18"}]},{"text":"选项102","value":"19","children":[{"text":"选项01","value":"20"},{"text":"选项02","value":"21"},{"text":"选项03","value":"22"}]},{"text":"选项103","value":"23","children":[{"text":"选项01","value":"24"},{"text":"选项02","value":"25"},{"text":"选项03","value":"26"}]}]},{"text":"选项203","value":"27","children":[{"text":"选项101","value":"28","children":[{"text":"选项01","value":"29"},{"text":"选项02","value":"30"},{"text":"选项03","value":"31"}]},{"text":"选项102","value":"32","children":[{"text":"选项01","value":"33"},{"text":"选项02","value":"34"},{"text":"选项03","value":"35"}]},{"text":"选项103","value":"36","children":[{"text":"选项01","value":"37"},{"text":"选项02","value":"38"},{"text":"选项03","value":"39"}]}]}]},"_fc_id":"id_F7qfmscwdggdd0c","name":"ref_Fnx1mscwdggdd1c","display":true,"hidden":false,"_fc_drag_tag":"cascader"}]}]},"_fc_id":"id_Fp05mscw4vznboc","name":"ref_Ft25mscw4vznbpc","display":true,"hidden":false,"_fc_drag_tag":"tableForm"}],"display":true,"hidden":false},{"type":"vanTab","props":{"title":"选项卡"},"_fc_id":"id_Fat9mscvwy5xajc","name":"ref_Fb0gmscvwy5xakc","_fc_drag_tag":"vanTab","children":[{"type":"select","field":"Fk4qmscw25upb0c","title":"选择器","info":"","effect":{"fetch":""},"$required":false,"optionsTo":"props.options","options":[{"text":"选项01","value":"1"},{"text":"选项02","value":"2"},{"text":"选项03","value":"3"}],"_fc_id":"id_Fdwgmscw25upb1c","name":"ref_F81qmscw25upb2c","_fc_drag_tag":"select","display":true,"hidden":false},{"type":"select","field":"Flinmscw2373axc","title":"选择器","info":"","effect":{"fetch":""},"$required":false,"optionsTo":"props.options","options":[{"text":"选项01","value":"1"},{"text":"选项02","value":"2"},{"text":"选项03","value":"3"}],"_fc_id":"id_F5k5mscw2373ayc","name":"ref_F93gmscw2373azc","_fc_drag_tag":"select","display":true,"hidden":false},{"type":"select","field":"Fjupmscw2eofb3c","title":"选择器","info":"","effect":{"fetch":""},"$required":false,"optionsTo":"props.options","options":[{"text":"选项01","value":"1"},{"text":"选项02","value":"2"},{"text":"选项03","value":"3"}],"_fc_id":"id_Fl40mscw2eofb4c","name":"ref_Fc3fmscw2eofb5c","_fc_drag_tag":"select","display":true,"hidden":false}],"display":true,"hidden":false}],"_fc_id":"id_For6mscvw65dadc","name":"ref_Fzqmmscvw65daec","_fc_drag_tag":"vanTabs","props":{"type":"line","swipeable":true},"display":true,"hidden":false}]'),
+                    options: options,
+                    formData: loadCache(),
+                    api: null,
+                };
+            },
+            watch: {
+                formData: {
+                    deep: true,
+                    handler(val)
+                    {
+                        if (CACHE_ENABLED)
+                        {
+                            localStorage.setItem(STORAGE_KEY, JSON.stringify(val));
+                        }
+                    }
+                }
+            },
+            methods: {
+                onSubmit(formData)
+                {
+                    ascript.call('submit', JSON.stringify(formData));
+                    ascript.close();
+                }
+            }
+        };
+        const app = Vue.createApp(App);
+        app.use(vant).use(formCreateMobile);
+        app.mount("#app");
+    </script>
+
+</body>
+
+</html>
