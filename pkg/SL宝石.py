@@ -47,7 +47,6 @@ def parseGem(r评级, r属性):
         raise GemOcrError("识别不到宝石属性")
     data = Entry.from_str(txt[0])
     if data.kind == EntryKind.错误:
-        toast(f"异常文本: {repr(txt)} like {txt}")
         # 使用备用 OCR
         txt_alt = ocrGet(r属性)
         if txt_alt and len(txt_alt) > 0:
@@ -58,6 +57,8 @@ def parseGem(r评级, r属性):
     if data.kind == EntryKind.错误:
         raise GemParseError(level=level, data=data, msg="解析宝石属性出错")
 
+    if data.value == 0:
+        toast(f"异常: {txt}")
     return level, data
 
 
@@ -283,7 +284,7 @@ def SL宝石(gf: GemFilter, saveIndex=1, 背包上界=5, target=GemLevel.顶级,
             # 合成产物品质检查
             g = Gem(_new, level, data)
             isGood = gf.check(g)
-            toast(f"第 {loopTimes} 次: {g} {'出货!!!' if isGood else 'SL重来'}")
+            toast(f"第 {loopTimes} 次: {g} {'出货!!!' if isGood else ''}")
             # 出货了就保存, 退出死循环
             if isGood:
                 for item in once:
