@@ -84,6 +84,7 @@ def SL宝石(gf: GemFilter, saveIndex=1, 背包上界=5, target=GemLevel.顶级,
     r["属性文本"] = loadRect("融合器-宝石属性文本")
     r["评级文本"] = loadRect("融合器-宝石评级文本")
     r["添加按钮"] = loadRect("融合器-添加按钮")
+    r["道具合成"] = loadRect("融合器-道具合成")
     for item in [
         # 退出重进
             "菜单", "上一级", "主菜单页", "主菜单选项", "返回主菜单-是", "开始游戏", "跳过登录-否", f"存档{saveIndex}",
@@ -112,7 +113,7 @@ def SL宝石(gf: GemFilter, saveIndex=1, 背包上界=5, target=GemLevel.顶级,
         pClick(v["主菜单页"], before=long)
         pClick(v["主菜单选项"], before=short)
         pClick(v["返回主菜单-是"], before=short)
-        pClick(v["开始游戏"], before=long, msg="点击开始游戏")
+        pClick(v["开始游戏"], before=long)
         pClick(v["跳过登录-否"], before=short)
         pClick(
             v[f"存档{saveIndex}"],
@@ -124,13 +125,13 @@ def SL宝石(gf: GemFilter, saveIndex=1, 背包上界=5, target=GemLevel.顶级,
         pClick(v["上一级"], before=short)
         pClick(v["上一级"], before=short)
         pClick(v["马上存档"], before=short)
-        pClick(v["马上存档-确认"], before=short, msg="存个档")
+        pClick(v["马上存档-确认"], before=short)
 
     def 进入宝石强化界面():
-        pClick(v["平A"], before=short, msg="打开融合器")
-        if ocrFind("宝石") is None:
+        pClick(v["平A"], before=short, after=short)
+        if ocrGet(img=pin(r['道具合成'])):
             pClick(v["融合器-道具合成"], before=min)
-        pClick(v["融合器-宝石强化"], before=short, msg="打开宝石强化界面")
+        pClick(v["融合器-宝石强化"], before=short)
 
     def 选择宝石配方(target: GemLevel):
         print(f"选择配方: 宝石配方{target.name}")

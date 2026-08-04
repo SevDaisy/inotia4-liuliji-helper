@@ -1,5 +1,3 @@
-from xml.etree.ElementTree import tostring
-
 from ..utils.auto import imgFind, ocrFind, ocrGet, ocrPaddle_V5, pClick, pin, toast
 from ..utils.db import loadPoint, loadRect
 from ..utils.model import *
@@ -17,6 +15,7 @@ def SL孔位(saveIndex=1, packIndex=1, posID="00", is可强化装备=True):
     r = {}
     r["孔位数量"] = loadRect("融合器-强化孔位数量" if is可强化装备 else "融合器-饰品孔位数量")
     r["添加按钮"] = loadRect("融合器-添加按钮")
+    r["道具合成"] = loadRect("融合器-道具合成")
     for item in [
         # 退出重进
             "菜单", "上一级", "主菜单页", "主菜单选项", "返回主菜单-是", "开始游戏", "跳过登录-否", f"存档{saveIndex}",
@@ -55,8 +54,8 @@ def SL孔位(saveIndex=1, packIndex=1, posID="00", is可强化装备=True):
         pClick(v["马上存档-确认"], before=short)
 
     def 进入宝石孔生成界面():
-        pClick(v["平A"], before=short)
-        if ocrFind("宝石") is None:
+        pClick(v["平A"], before=short, after=short)
+        if ocrGet(img=pin(r['道具合成'])):
             pClick(v["融合器-道具合成"], before=min)
         pClick(v["融合器-宝石孔生成"], before=short)
 
