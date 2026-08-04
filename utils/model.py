@@ -72,14 +72,19 @@ class Entry:
         """尝试将字符串解析为整数、浮点数或百分数，失败时返回 0.0"""
 
         try:
-            return int(s)      # 尝试整数
+            res = int(s)
+            # 补丁: OCR 可能将两位数识别为三位数, 此时应将个位截去
+            if res >= 100:
+                res = int(res/10)
+            return res      # 尝试整数
         except ValueError:
             try:
                 return float(s)  # 尝试浮点数
             except ValueError:
                 if '%' in s:
                     try:
-                        return float(s.replace('%', '')) / 100  # 处理百分数
+                        # 补丁: OCR 可能会识别到两个小数点 或 多个百分号
+                        return float(s.replace('%', '').replace('..', '.')) / 100
                     except ValueError:
                         print(f"警告: 无法解析百分数字符串 '{s}'，返回 0.0")
                         return 0.0
