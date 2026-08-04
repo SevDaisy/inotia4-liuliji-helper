@@ -67,7 +67,7 @@ def SL孔位(saveIndex=1, packIndex=1, posID="00", is可强化装备=True):
         # 打孔
         for x in [
             f"背包页{packIndex}",
-            "背包格00",
+            f"背包格{posID}",
             "宝石材料添加",
             "融合器-确认融合",
             "融合器-确认融合-是",
