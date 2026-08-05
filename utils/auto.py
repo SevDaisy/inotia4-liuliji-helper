@@ -67,7 +67,8 @@ def with_delay(func):
     """装饰器：在执行核心操作前后插入延迟, 并支持日志和弹窗"""
     def wrapper(*args, before=0, after=0, msg="", ** kwargs):
         if msg == "":
-            print("\t"*8 + f"{func.__name__}({str(args)},{str(kwargs)})")
+            # print("\t"*8 + f"{func.__name__}({str(args)},{str(kwargs)})")
+            pass
         else:
             toast(msg, duration=1000)
         if before > 0:
