@@ -105,7 +105,6 @@ def SL强化(saveIndex=1, packIndex=1, maxRetry=0, maxSuccess=15, mode="Normal")
                     break
 
         # 一直强化到 +31
-        isKey = "关键" in mode
         oldLv = lv
         while oldLv < 31:
             打开背包()
@@ -121,9 +120,7 @@ def SL强化(saveIndex=1, packIndex=1, maxRetry=0, maxSuccess=15, mode="Normal")
                 pClick(v["强化成功"], msg="+2 保存一下")
 
             # 有进步就保存
-            # mode == 关键, 则 +30 不保存
-            # mode != 关键, 则 +30 正常保存
-            if oldLv < lv and (not isKey or lv != 30):
+            if oldLv < lv:
                 保存()
                 oldLv = lv
                 continue
