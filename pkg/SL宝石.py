@@ -245,6 +245,9 @@ def SL宝石(gf: GemFilter, saveIndex=1, 背包上界=5, target=GemLevel.顶级,
             if not isGood:
                 gList[g.level.value][g.index] = g
 
+    # 保存一下
+    退出并保存()
+
     if mode == "Only Prepare":
         return
     elif firstEmpty(isEmpty) == -1:
@@ -253,8 +256,6 @@ def SL宝石(gf: GemFilter, saveIndex=1, 背包上界=5, target=GemLevel.顶级,
     # ===============================================================================
     # ================================ 开始 SL 刷宝石 ================================
     # ===============================================================================
-    # 保存一下
-    退出并保存()
     loopTimes = 0
     gems = list(gList[target.value-1].values())  # 原材料列表
     if len(gems) <= 2:
