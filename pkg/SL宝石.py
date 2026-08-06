@@ -118,8 +118,7 @@ def SL宝石(gf: GemFilter, saveIndex=1, 背包上界=5, target=GemLevel.顶级,
         pClick(v["跳过登录-否"], before=short)
         pClick(
             v[f"存档{saveIndex}"],
-            before=long, after=long,
-            msg=f"点击存档{saveIndex}"
+            before=long, after=long
         )
 
     def 退出并保存():
@@ -135,7 +134,6 @@ def SL宝石(gf: GemFilter, saveIndex=1, 背包上界=5, target=GemLevel.顶级,
         pClick(v["融合器-宝石强化"], before=short)
 
     def 选择宝石配方(target: GemLevel):
-        print(f"选择配方: 宝石配方{target.name}")
         pClick(v["背包页1"], before=min)  # 点一下背包, 不然宝石信息框会挡住换配方的按钮
         pClick(v["宝石配方选择"], before=min)
         pClick(v[f"宝石配方{target.name}"], before=min)
