@@ -163,11 +163,11 @@ def SL宝石(gf: GemFilter, saveIndex=1, 背包上界=5, target=GemLevel.顶级,
     cnt = 0
     isEmpty = [int(False)] * (背包上界 * 16)  # 记录当前位置是否是空位, 0不是空位, 1是空位
     for page in range(1, 背包上界+1):
-        pClick(v[f"背包页{page}"], before=short)
+        pClick(v[f"背包页{page}"], before=min)
         for row in range(4):
             for col in range(4):
                 i += 1
-                pClick(v[f"背包格{row}{col}"], before=min, after=min)
+                pClick(v[f"背包格{row}{col}"], before=min, after=short)
 
                 # 空格子跳过
                 img按钮 = pin(rect=r['添加按钮'])
@@ -228,7 +228,7 @@ def SL宝石(gf: GemFilter, saveIndex=1, 背包上界=5, target=GemLevel.顶级,
             # 查看合成结果
             page, row, col = pkgLocation(_new)
             pClick(v[f"背包页{page}"], before=min)
-            pClick(v[f"背包格{row}{col}"], before=min, after=min)
+            pClick(v[f"背包格{row}{col}"], before=min, after=short)
 
             # 解析屏幕中的宝石信息
             try:
