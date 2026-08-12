@@ -92,6 +92,7 @@ def SL宝石(gf: GemFilter, saveIndex=1, 背包上界=5, target=GemLevel.顶级,
         # 去融合
             "平A", "融合器-道具合成", "融合器-宝石强化", "宝石配方选择", "宝石配方中级", "宝石配方高级", "宝石配方顶级", "宝石配方混沌",
             "宝石材料位1", "宝石材料位2", "宝石材料位3", "宝石材料添加", "融合器-确认融合", "融合器-确认融合-是", "融合器-融合成功-确认",
+            "融合器-材料详情-关闭",
         # 辅助按键
             "背包页1", "背包页2", "背包页3", "背包页4", "背包页5",
             "背包格00", "背包格01", "背包格02", "背包格03",
@@ -110,6 +111,18 @@ def SL宝石(gf: GemFilter, saveIndex=1, 背包上界=5, target=GemLevel.顶级,
     def 退出并重新登录():
         pClick(v["上一级"], before=short)
         pClick(v["上一级"], before=short)
+        pClick(v["菜单"], before=short)
+        pClick(v["主菜单页"], before=long)
+        pClick(v["主菜单选项"], before=short)
+        pClick(v["返回主菜单-是"], before=short)
+        pClick(v["开始游戏"], before=long)
+        pClick(v["跳过登录-否"], before=short)
+        pClick(
+            v[f"存档{saveIndex}"],
+            before=long, after=long
+        )
+
+    def 重新登录():
         pClick(v["菜单"], before=short)
         pClick(v["主菜单页"], before=long)
         pClick(v["主菜单选项"], before=short)
@@ -151,6 +164,42 @@ def SL宝石(gf: GemFilter, saveIndex=1, 背包上界=5, target=GemLevel.顶级,
         pClick(v["融合器-确认融合"], before=delayX)
         pClick(v["融合器-确认融合-是"], before=delayX)
         pClick(v["融合器-融合成功-确认"], before=delayX)
+
+    # 卡背包 bug 重置宝石：https://www.bilibili.com/video/BV1x8411j7Wx
+    # 不做检查地假定用户已经完成了所有前置操作，只需要重复合成并筛选需要保存的宝石
+    # 假定用户界面符合以下规则
+    # 1. 前两行都是预卡背包，且已经被复制为佣兵身上某个位置的装备
+    # 2. 第三行是神灯（或其它占位材料）
+    # 3. 第四行前三个是待合成的宝石
+    # 4. 第四行第四格是佣兵身上某个位置的装备，且已经被粉碎，并被解除下来的一个背包所占据
+    # 5. 游戏已处于融合器的宝石合成界面，且宝石原料已经完成添加
+    if mode == "bug":
+        cnt = 0
+        while True:
+            cnt += 1
+            pClick(v["融合器-确认融合"], before=min)
+            pClick(v["融合器-确认融合-是"], before=min)
+            pClick(v["融合器-融合成功-确认"], before=min)
+            pClick(v["背包格00"], before=min, after=min)
+            try:
+                level, data = parseGem(r["评级文本"], r["属性文本"])
+            except GemOcrError:
+                continue
+            except GemParseError as e:
+                print(str(e))
+                continue
+            # 合成产物品质检查
+            g = Gem(0, level, data)
+            isGood = gf.check(g)
+            toast(f"第 {cnt} 次: {g} {'出货!!!' if isGood else ''}")
+            # 出货了就保存, 退出死循环
+            if isGood:
+                退出并保存()
+                重新登录()
+                break
+            else:
+                pClick(v["融合器-材料详情-关闭"], before=min)
+        return
 
     if ocrFind('宝石') is None:
         进入宝石强化界面()
