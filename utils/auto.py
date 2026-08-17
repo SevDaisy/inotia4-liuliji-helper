@@ -5,13 +5,14 @@ import cv2
 from ascript.android import action, screen
 from ascript.android.screen import FindImages, Ocr
 from ascript.android.system import Device, R
-from ascript.android.ui import Dialog
+from ascript.android.ui import Dialog, Canvas
 import PaddleOcrV5
 
 # 全局变量声明
 cx = 'center_x'
 cy = 'center_y'
 MilliSeconds = 0.001
+canvas = Canvas()
 
 
 class Point:
@@ -181,9 +182,46 @@ def doSlide(x1, y1, x2, y2, dur=300):
 
 @with_delay
 def pClick(p: Point, dur=20):
+    drawCross(p)
     return action.click(p.x, p.y, dur)
 
 
 @with_delay
 def pSlide(start: Point, end: Point, dur=300):
+    drawArrow(start, end)
     return action.slide(start.x, start.y, end.x, end.y, dur)
+
+
+def enableDraw():
+    canvas.show()
+
+
+def drawRegion(rect: Rect, msg="", dur=1000):
+    canvas.draw_region(
+        rect.x1, rect.y1,
+        rect.x2, rect.y2,
+        fill="rgba(255,0,255,0.15)",
+        label=msg,
+        duration=dur
+    )
+
+
+def drawCross(p: Point, msg="", dur=1000):
+    canvas.draw_cross(
+        p.x, p.y,
+        color="#585656",
+        label=msg,
+        duration=dur
+    )
+
+
+def drawArrow(p1: Point, p2: Point, dur=1000):
+    canvas.draw_arrow(
+        p1.x, p1.y,
+        p2.x, p2.y,
+        duration=dur
+    )
+
+
+def disableDraw():
+    canvas.close()

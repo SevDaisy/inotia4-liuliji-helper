@@ -7,8 +7,8 @@ from .pkg.SL孔位 import SL孔位
 print("main OK")
 
 gf0621 = GemFilter([
-    Entry.from_str("暴击伤害增加率: 16.5%"),
-
+    Entry.from_str("暴击伤害增加率: 16.0%"),  # 最高16.5
+    # Entry.from_str("暴击率: 8.5%"), # 最高9.0
 ])
 gf0804 = GemFilter([
     Entry.from_str("暴击率: 8.6%"),
@@ -91,23 +91,23 @@ def _0804刺客():
 def 新档狂战():
     # 新档 顶级宝石就可以留 低1 中3 高9 顶27
     gf = GemFilter([
-        Entry.from_str("暴击率: 9%"),
-        Entry.from_str("暴击伤害增加率: 16.5%"),
-        Entry.from_str("回避率: 4.5%"),
-        # Entry.from_str("MP恢复: 5"),
+        # Entry.from_str("暴击率: 8.6%"),
+        # Entry.from_str("暴击伤害增加率: 16.5%"),
+        # Entry.from_str("回避率: 4.5%"),
+        # Entry.from_str("MP恢复: 6"),
         # Entry.from_str("暴击抵抗率: 13%"),  # 后期找机会单出一个
-        # Entry.from_str("HP吸收: 8%"),
+        Entry.from_str("HP吸收: 8%"),
         # Entry.from_str("魔法抵抗率: 4%"),
     ])
 
-    SL孔位(saveIndex=3, packIndex=1, posID=f"00", is可强化装备=False)
+    # SL孔位(saveIndex=3, packIndex=1, posID=f"00", is可强化装备=False)
     # SL孔位(saveIndex=3, packIndex=1, posID=f"00", is可强化装备=True)
     # SL孔位(saveIndex=3, packIndex=1, posID=f"01", is可强化装备=True)
     # SL强化(saveIndex=3, packIndex=1, maxSuccess=13)
     # SL强化(saveIndex=3, packIndex=1, mode="21")
     # SL宝石(gf, saveIndex=3, 背包上界=1, target=GemLevel.混沌, mode="Only Prepare")
     # SL宝石(gf, saveIndex=3, 背包上界=2, target=GemLevel.混沌, mode="FULL")
-    # SL宝石(gf, saveIndex=3, mode="bug")
+    SL宝石(gf, saveIndex=3, mode="bug")
 
 
 新档狂战()

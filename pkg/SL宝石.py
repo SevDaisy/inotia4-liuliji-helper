@@ -1,4 +1,4 @@
-from ..utils.auto import imgFind, ocrFind, ocrGet, ocrPaddle_V5, pClick, pin, toast
+from ..utils.auto import drawRegion, imgFind, ocrFind, ocrGet, ocrPaddle_V5, pClick, pin, toast
 from ..utils.db import loadPoint, loadRect
 from ..utils.model import *
 
@@ -86,6 +86,7 @@ def SL宝石(gf: GemFilter, saveIndex=1, 背包上界=5, target=GemLevel.顶级,
     r["评级文本"] = loadRect("融合器-宝石评级文本")
     r["添加按钮"] = loadRect("融合器-添加按钮")
     r["道具合成"] = loadRect("融合器-道具合成")
+
     for item in [
         # 退出重进
             "菜单", "上一级", "主菜单页", "主菜单选项", "返回主菜单-是", "开始游戏", "跳过登录-否", f"存档{saveIndex}",
