@@ -1,5 +1,5 @@
-from ..utils.auto import drawRegion, imgFind, ocrFind, ocrGet, ocrPaddle_V5, pClick, pin, toast
-from ..utils.db import loadPoint, loadRect
+from ..utils.auto import imgFind, ocrFind, ocrGet, ocrPaddle_V5, pClick, pin, toast
+from ..utils.db import r, v
 from ..utils.model import *
 
 
@@ -80,33 +80,33 @@ def SL宝石(gf: GemFilter, saveIndex=1, 背包上界=5, target=GemLevel.顶级,
     min = 100
     short = 200
     long = 700
-    v = {}
-    r = {}
-    r["属性文本"] = loadRect("融合器-宝石属性文本")
-    r["评级文本"] = loadRect("融合器-宝石评级文本")
-    r["添加按钮"] = loadRect("融合器-添加按钮")
-    r["道具合成"] = loadRect("融合器-道具合成")
 
-    for item in [
+    # 检查所需的 rect 是否已加载
+    for key in ["融合器-宝石属性文本", "融合器-宝石评级文本", "融合器-添加按钮", "融合器-道具合成"]:
+        if key not in r:
+            toast(f"矩形 {key} 未加载，程序退出")
+            return
+
+    # 检查所需的 point 是否已加载
+    required_points = [
         # 退出重进
-            "菜单", "上一级", "主菜单页", "主菜单选项", "返回主菜单-是", "开始游戏", "跳过登录-否", f"存档{saveIndex}",
+        "菜单", "上一级", "主菜单页", "主菜单选项", "返回主菜单-是", "开始游戏", "跳过登录-否", f"存档{saveIndex}",
         # 去融合
-            "平A", "融合器-道具合成", "融合器-宝石强化", "宝石配方选择", "宝石配方中级", "宝石配方高级", "宝石配方顶级", "宝石配方混沌",
-            "宝石材料位1", "宝石材料位2", "宝石材料位3", "宝石材料添加", "融合器-确认融合", "融合器-确认融合-是", "融合器-融合成功-确认",
-            "融合器-材料详情-关闭",
+        "平A", "融合器-道具合成", "融合器-宝石强化", "宝石配方选择", "宝石配方中级", "宝石配方高级", "宝石配方顶级", "宝石配方混沌",
+        "宝石材料位1", "宝石材料位2", "宝石材料位3", "宝石材料添加", "融合器-确认融合", "融合器-确认融合-是", "融合器-融合成功-确认",
+        "融合器-材料详情-关闭",
         # 辅助按键
-            "背包页1", "背包页2", "背包页3", "背包页4", "背包页5",
-            "背包格00", "背包格01", "背包格02", "背包格03",
-            "背包格10", "背包格11", "背包格12", "背包格13",
-            "背包格20", "背包格21", "背包格22", "背包格23",
-            "背包格30", "背包格31", "背包格32", "背包格33",
+        "背包页1", "背包页2", "背包页3", "背包页4", "背包页5",
+        "背包格00", "背包格01", "背包格02", "背包格03",
+        "背包格10", "背包格11", "背包格12", "背包格13",
+        "背包格20", "背包格21", "背包格22", "背包格23",
+        "背包格30", "背包格31", "背包格32", "背包格33",
         # 保存
-            "马上存档", "马上存档-确认"
-    ]:
-        v[item] = loadPoint(item)
-    for k, p in v.items():
-        if p is None:
-            toast(f"坐标 {k} 没取到，程序退出")
+        "马上存档", "马上存档-确认"
+    ]
+    for key in required_points:
+        if key not in v:
+            toast(f"坐标 {key} 未加载，程序退出")
             return
 
     def 退出并重新登录():
@@ -143,7 +143,7 @@ def SL宝石(gf: GemFilter, saveIndex=1, 背包上界=5, target=GemLevel.顶级,
 
     def 进入宝石强化界面():
         pClick(v["平A"], before=short, after=short)
-        if ocrGet(img=pin(r['道具合成'])):
+        if ocrGet(img=pin(r['融合器-道具合成'])):
             pClick(v["融合器-道具合成"], before=min)
         pClick(v["融合器-宝石强化"], before=short)
 
@@ -183,7 +183,7 @@ def SL宝石(gf: GemFilter, saveIndex=1, 背包上界=5, target=GemLevel.顶级,
             pClick(v["融合器-融合成功-确认"], before=min)
             pClick(v["背包格00"], before=min, after=min)
             try:
-                level, data = parseGem(r["评级文本"], r["属性文本"])
+                level, data = parseGem(r["融合器-宝石评级文本"], r["融合器-宝石属性文本"])
             except GemOcrError:
                 continue
             except GemParseError as e:
@@ -218,7 +218,7 @@ def SL宝石(gf: GemFilter, saveIndex=1, 背包上界=5, target=GemLevel.顶级,
                 pClick(v[f"背包格{row}{col}"], before=min, after=short)
 
                 # 空格子跳过
-                img按钮 = pin(rect=r['添加按钮'])
+                img按钮 = pin(rect=r['融合器-添加按钮'])
                 foundBtn = imgFind("宝石材料添加", img按钮)
                 # toast(f"{i-1}: ({row},{col}) {'空' if notFound is None else '非空'}")
                 if foundBtn is None:
@@ -227,7 +227,7 @@ def SL宝石(gf: GemFilter, saveIndex=1, 背包上界=5, target=GemLevel.顶级,
 
                 # 解析屏幕中的宝石信息
                 try:
-                    level, data = parseGem(r["评级文本"], r["属性文本"])
+                    level, data = parseGem(r["融合器-宝石评级文本"], r["融合器-宝石属性文本"])
                 except GemOcrError:
                     continue
                 except GemParseError as e:
@@ -280,7 +280,7 @@ def SL宝石(gf: GemFilter, saveIndex=1, 背包上界=5, target=GemLevel.顶级,
 
             # 解析屏幕中的宝石信息
             try:
-                level, data = parseGem(r["评级文本"], r["属性文本"])
+                level, data = parseGem(r["融合器-宝石评级文本"], r["融合器-宝石属性文本"])
             except GemOcrError:
                 continue
             except GemParseError as e:
@@ -324,7 +324,7 @@ def SL宝石(gf: GemFilter, saveIndex=1, 背包上界=5, target=GemLevel.顶级,
             pClick(v[f"背包格{row}{col}"], before=min, after=min)
             # 解析屏幕中的宝石信息
             try:
-                level, data = parseGem(r["评级文本"], r["属性文本"])
+                level, data = parseGem(r["融合器-宝石评级文本"], r["融合器-宝石属性文本"])
             except GemOcrError:
                 continue
             except GemParseError as e:

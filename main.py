@@ -1,3 +1,5 @@
+from .utils.auto import Point, drawCross, drawRegion, pClick
+from .utils.db import v, r
 from .utils.model import GemLevel, GemFilter, Entry
 from .pkg.SL强化 import SL强化
 from .pkg.SL宝石 import SL宝石
@@ -107,10 +109,26 @@ def 新档狂战():
     # SL强化(saveIndex=3, packIndex=1, mode="21")
     # SL宝石(gf, saveIndex=3, 背包上界=1, target=GemLevel.混沌, mode="Only Prepare")
     # SL宝石(gf, saveIndex=3, 背包上界=2, target=GemLevel.混沌, mode="FULL")
-    SL宝石(gf, saveIndex=3, mode="bug")
+    # SL宝石(gf, saveIndex=3, mode="bug")
 
 
-新档狂战()
+def 展示参数标定():
+    for x in range(0, 4):
+        for y in range(0, 4):
+            p = v[f"背包格{x}{y}"]
+            drawCross(p, msg=f"{p.x},{p.y}", dur=60000)
+    for x in [
+        "融合器-强化孔位数量",
+        "融合器-饰品孔位数量",
+        "融合器-宝石评级文本",
+        "融合器-宝石属性文本",
+        "背包-装备评级文本",
+    ]:
+        drawRegion(r[x], msg=x, dur=60000)
 
+
+展示参数标定()
 # _0621刷暴伤()
 # _0804魔导()
+
+# 新档狂战()

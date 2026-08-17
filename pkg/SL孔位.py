@@ -1,5 +1,5 @@
-from ..utils.auto import imgFind, ocrFind, ocrGet, ocrPaddle_V5, pClick, pin, toast
-from ..utils.db import loadPoint, loadRect
+from ..utils.auto import ocrGet, ocrPaddle_V5, pClick, pin, toast
+from ..utils.db import r, v
 from ..utils.model import *
 
 
@@ -11,29 +11,32 @@ def SL孔位(saveIndex=1, packIndex=1, posID="00", is可强化装备=True):
     min = 100
     short = 200
     long = 700
-    v = {}
-    r = {}
-    r["孔位数量"] = loadRect("融合器-强化孔位数量" if is可强化装备 else "融合器-饰品孔位数量")
-    r["添加按钮"] = loadRect("融合器-添加按钮")
-    r["道具合成"] = loadRect("融合器-道具合成")
-    for item in [
+
+    # 检查所需的 rect 是否已加载
+    孔位key = "融合器-强化孔位数量" if is可强化装备 else "融合器-饰品孔位数量"
+    for key in [孔位key, "融合器-添加按钮", "融合器-道具合成"]:
+        if key not in r:
+            toast(f"矩形 {key} 未加载，程序退出")
+            return
+
+    # 检查所需的 point 是否已加载
+    required_points = [
         # 退出重进
-            "菜单", "上一级", "主菜单页", "主菜单选项", "返回主菜单-是", "开始游戏", "跳过登录-否", f"存档{saveIndex}",
+        "菜单", "上一级", "主菜单页", "主菜单选项", "返回主菜单-是", "开始游戏", "跳过登录-否", f"存档{saveIndex}",
         # 去融合
-            "平A", "融合器-道具合成", "融合器-宝石孔生成", "宝石材料添加", "融合器-确认融合", "融合器-确认融合-是", "融合器-融合成功-确认",
+        "平A", "融合器-道具合成", "融合器-宝石孔生成", "宝石材料添加", "融合器-确认融合", "融合器-确认融合-是", "融合器-融合成功-确认",
         # 辅助按键
-            "背包页1", "背包页2", "背包页3", "背包页4", "背包页5",
-            "背包格00", "背包格01", "背包格02", "背包格03",
-            "背包格10", "背包格11", "背包格12", "背包格13",
-            "背包格20", "背包格21", "背包格22", "背包格23",
-            "背包格30", "背包格31", "背包格32", "背包格33",
+        "背包页1", "背包页2", "背包页3", "背包页4", "背包页5",
+        "背包格00", "背包格01", "背包格02", "背包格03",
+        "背包格10", "背包格11", "背包格12", "背包格13",
+        "背包格20", "背包格21", "背包格22", "背包格23",
+        "背包格30", "背包格31", "背包格32", "背包格33",
         # 保存
-            "马上存档", "马上存档-确认"
-    ]:
-        v[item] = loadPoint(item)
-    for k, p in v.items():
-        if p is None:
-            toast(f"坐标 {k} 没取到，程序退出")
+        "马上存档", "马上存档-确认"
+    ]
+    for key in required_points:
+        if key not in v:
+            toast(f"坐标 {key} 未加载，程序退出")
             return
 
     def 退出并重新登录():
@@ -55,7 +58,7 @@ def SL孔位(saveIndex=1, packIndex=1, posID="00", is可强化装备=True):
 
     def 进入宝石孔生成界面():
         pClick(v["平A"], before=short, after=short)
-        if ocrGet(img=pin(r['道具合成'])):
+        if ocrGet(img=pin(r['融合器-道具合成'])):
             pClick(v["融合器-道具合成"], before=min)
         pClick(v["融合器-宝石孔生成"], before=short)
 
@@ -77,7 +80,7 @@ def SL孔位(saveIndex=1, packIndex=1, posID="00", is可强化装备=True):
             pClick(v[x], before=short, after=short)
 
         # 检查结果
-        txt = ocrPaddle_V5(img=pin(r["孔位数量"]))
+        txt = ocrPaddle_V5(img=pin(r[孔位key]))
         res = 0
         if txt and len(txt) > 0:
             try:

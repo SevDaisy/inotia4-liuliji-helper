@@ -1,6 +1,7 @@
 import sys
 import time
 
+
 import cv2
 from ascript.android import action, screen
 from ascript.android.screen import FindImages, Ocr
@@ -13,6 +14,32 @@ cx = 'center_x'
 cy = 'center_y'
 MilliSeconds = 0.001
 canvas = Canvas()
+leftOffset = 143  # 左侧黑边宽度
+bottomOffset = 67  # 底部黑边高度, 特殊的, 发现黑边高度 49 时, offset 取 67 对 Y 坐标的修正是最准确的, 但并不知道为什么是 67
+
+
+def getResolution():
+    """获取当前设备的屏幕分辨率, 返回 (width, height)"""
+    display = Device.display()
+    return display.widthPixels, display.heightPixels
+
+
+def getScale(left=0, bottom=0):
+    w, h = getResolution()
+    return (w-left)/w, (h-bottom)/h
+
+
+scaleX, scaleY = getScale(leftOffset, bottomOffset)
+
+
+def _map_coord(x: int, y: int) -> tuple:
+    """将真实坐标映射为传入坐标, 使绘制结果落在真实坐标位置"""
+    # 横向：真实坐标 = 传入坐标 * (整体长度 - 左侧黑边) / 整体长度 + 左侧黑边
+    # 纵向：真实坐标 = 传入坐标 * (整体长度 - 底侧黑边) / 整体长度
+    # mapped坐标 = 以上公式的逆运算
+    mapped_x = round((x-leftOffset)/scaleX)
+    mapped_y = round(y/scaleY)
+    return mapped_x, mapped_y
 
 
 class Point:
@@ -134,7 +161,7 @@ def ocrPaddle_V5(rect=None, img=None):
 
 @with_delay
 def ocrFind(pattern: str, img=None):
-    """ 模式匹配，返回匹配到的中心位置 """
+    """ 模式匹配, 返回匹配到的中心位置 """
     if img is None:
         img = pin()
     res = Ocr.mlkitocr_v2(pattern=pattern, image=img)
@@ -197,28 +224,36 @@ def enableDraw():
 
 
 def drawRegion(rect: Rect, msg="", dur=1000):
+    sx1, sy1 = _map_coord(rect.x1, rect.y1)
+    sx2, sy2 = _map_coord(rect.x2, rect.y2)
     canvas.draw_region(
-        rect.x1, rect.y1,
-        rect.x2, rect.y2,
+        sx1, sy1,
+        sx2, sy2,
         fill="rgba(255,0,255,0.15)",
         label=msg,
         duration=dur
     )
 
 
-def drawCross(p: Point, msg="", dur=1000):
+def drawCross(p: Point, msg="", dur=10000):
+    sx, sy = _map_coord(p.x, p.y)
     canvas.draw_cross(
-        p.x, p.y,
-        color="#585656",
+        sx, sy,
+        font_size=8,
+        color="#00FFFF",
+        # color="#FF0000",
+        # label=f"{p.x},{p.y}" if msg == "" else msg,
         label=msg,
         duration=dur
     )
 
 
 def drawArrow(p1: Point, p2: Point, dur=1000):
+    sx1, sy1 = _map_coord(p1.x, p1.y)
+    sx2, sy2 = _map_coord(p2.x, p2.y)
     canvas.draw_arrow(
-        p1.x, p1.y,
-        p2.x, p2.y,
+        sx1, sy1,
+        sx2, sy2,
         duration=dur
     )
 

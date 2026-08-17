@@ -1,5 +1,5 @@
-from ..utils.auto import imgFind, ocrPaddle_V5, pClick, pSlide, toast, pin, ocrGet
-from ..utils.db import loadPoint, loadRect
+from ..utils.auto import imgFind, ocrPaddle_V5, pClick, pSlide, toast, pin
+from ..utils.db import r, v
 
 
 def SL强化(saveIndex=1, packIndex=1, maxRetry=0, maxSuccess=15, mode="Normal"):
@@ -13,10 +13,15 @@ def SL强化(saveIndex=1, packIndex=1, maxRetry=0, maxSuccess=15, mode="Normal")
     min = 100
     short = 200
     long = 700
-    v = {}
-    r = {}
-    r["评级文本"] = loadRect("背包-装备评级文本")
-    for item in [
+
+    # 检查所需的 rect 是否已加载
+    for key in ["背包-装备评级文本"]:
+        if key not in r:
+            toast(f"矩形 {key} 未加载，程序退出")
+            return
+
+    # 检查所需的 point 是否已加载
+    required_points = [
         "主菜单页", "主菜单选项", "返回主菜单-是", "开始游戏", "跳过登录-否", f"存档{saveIndex}",
         "菜单", "背包菜单", f"背包页{packIndex}",
         "背包格00", "背包格01", "背包格02", "背包格03",
@@ -24,11 +29,10 @@ def SL强化(saveIndex=1, packIndex=1, maxRetry=0, maxSuccess=15, mode="Normal")
         "背包格20", "背包格21", "背包格22", "背包格23",
         "背包格30", "背包格31", "背包格32", "背包格33",
         "强化成功", "主菜单页", "保存选项", "确认保存"
-    ]:
-        v[item] = loadPoint(item)
-    for k, p in v.items():
-        if p is None:
-            toast(f"坐标 {k} 没取到，程序退出")
+    ]
+    for key in required_points:
+        if key not in v:
+            toast(f"坐标 {key} 未加载，程序退出")
             return
 
     def 重新登录并打开菜单():
@@ -41,7 +45,7 @@ def SL强化(saveIndex=1, packIndex=1, maxRetry=0, maxSuccess=15, mode="Normal")
         pClick(v["菜单"], before=long)
 
     def 打开背包():
-        pClick(v["背包菜单"], before=short, msg="打开背包")
+        pClick(v["背包菜单"], before=short)
         # 点击 背包页{packIndex}
         if 1 < packIndex < 5:
             pClick(v[f"背包页{packIndex}"], before=short)
@@ -53,7 +57,7 @@ def SL强化(saveIndex=1, packIndex=1, maxRetry=0, maxSuccess=15, mode="Normal")
 
     def 识别当前装备等级() -> int:
         pClick(v["背包格12"], before=short, after=min)
-        img评级 = pin(rect=r["评级文本"])
+        img评级 = pin(rect=r["背包-装备评级文本"])
         txt = ocrPaddle_V5(img=img评级)
         if not (txt and len(txt) > 0):
             toast("未识别到装备评级文本")
