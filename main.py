@@ -18,6 +18,21 @@ gf0804 = GemFilter([
 ])
 
 
+def 展示参数标定():
+    for x in range(0, 4):
+        for y in range(0, 4):
+            p = v[f"背包格{x}{y}"]
+            drawCross(p, msg=f"{p.x},{p.y}", dur=60000)
+    for x in [
+        "融合器-强化孔位数量",
+        "融合器-饰品孔位数量",
+        "融合器-宝石评级文本",
+        "融合器-宝石属性文本",
+        "背包-装备评级文本",
+    ]:
+        drawRegion(r[x], msg=x, dur=60000)
+
+
 def _example():
     gf = GemFilter([
         Entry.from_str("暴击率: 6%"),
@@ -39,6 +54,7 @@ def _example():
     SL强化(saveIndex=1, packIndex=1, mode="混沌关键")
 
     SL孔位(saveIndex=1, packIndex=1, posID="00", is可强化装备=True)
+    SL孔位(saveIndex=1, packIndex=1, posID="00", targetNum=6, is可强化装备=True)
 
 
 def _0621刷暴伤():
@@ -97,12 +113,13 @@ def 新档狂战():
         # Entry.from_str("暴击伤害增加率: 16.5%"),
         # Entry.from_str("回避率: 4.5%"),
         # Entry.from_str("MP恢复: 6"),
+        # Entry.from_str("力量: 25"),
         # Entry.from_str("暴击抵抗率: 13%"),  # 后期找机会单出一个
-        Entry.from_str("HP吸收: 8%"),
+        # Entry.from_str("HP吸收: 8%"),
         # Entry.from_str("魔法抵抗率: 4%"),
     ])
 
-    # SL孔位(saveIndex=3, packIndex=1, posID=f"00", is可强化装备=False)
+    SL孔位(saveIndex=3, packIndex=1, posID=f"00", targetNum=6, is可强化装备=True)
     # SL孔位(saveIndex=3, packIndex=1, posID=f"00", is可强化装备=True)
     # SL孔位(saveIndex=3, packIndex=1, posID=f"01", is可强化装备=True)
     # SL强化(saveIndex=3, packIndex=1, maxSuccess=13)
@@ -112,23 +129,7 @@ def 新档狂战():
     # SL宝石(gf, saveIndex=3, mode="bug")
 
 
-def 展示参数标定():
-    for x in range(0, 4):
-        for y in range(0, 4):
-            p = v[f"背包格{x}{y}"]
-            drawCross(p, msg=f"{p.x},{p.y}", dur=60000)
-    for x in [
-        "融合器-强化孔位数量",
-        "融合器-饰品孔位数量",
-        "融合器-宝石评级文本",
-        "融合器-宝石属性文本",
-        "背包-装备评级文本",
-    ]:
-        drawRegion(r[x], msg=x, dur=60000)
-
-
-展示参数标定()
+# 展示参数标定()
 # _0621刷暴伤()
 # _0804魔导()
-
-# 新档狂战()
+新档狂战()

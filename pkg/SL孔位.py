@@ -3,7 +3,7 @@ from ..utils.db import r, v
 from ..utils.model import *
 
 
-def SL孔位(saveIndex=1, packIndex=1, posID="00", is可强化装备=True):
+def SL孔位(saveIndex=1, packIndex=1, posID="00", targetNum=4, is可强化装备=True):
     """
     saveIndex: 游戏的第几个存档位
     """
@@ -90,7 +90,7 @@ def SL孔位(saveIndex=1, packIndex=1, posID="00", is可强化装备=True):
                 toast(f"异常文本: {txt[0]}")
         else:
             toast("异常: 无法识别孔位数量")
-        if res == 4:
+        if res == targetNum:
             退出并保存()
             break
 
