@@ -119,14 +119,14 @@ def 新档狂战():
         # Entry.from_str("魔法抵抗率: 4%"),
     ])
 
-    SL孔位(saveIndex=3, packIndex=1, posID=f"00", targetNum=6, is可强化装备=True)
+    # SL孔位(saveIndex=3, packIndex=1, posID=f"00", targetNum=6, is可强化装备=True)
     # SL孔位(saveIndex=3, packIndex=1, posID=f"00", is可强化装备=True)
     # SL孔位(saveIndex=3, packIndex=1, posID=f"01", is可强化装备=True)
     # SL强化(saveIndex=3, packIndex=1, maxSuccess=13)
     # SL强化(saveIndex=3, packIndex=1, mode="21")
     # SL宝石(gf, saveIndex=3, 背包上界=1, target=GemLevel.混沌, mode="Only Prepare")
     # SL宝石(gf, saveIndex=3, 背包上界=2, target=GemLevel.混沌, mode="FULL")
-    # SL宝石(gf, saveIndex=3, mode="bug")
+    SL宝石(gf, saveIndex=3, mode="bug")
 
 
 # 展示参数标定()

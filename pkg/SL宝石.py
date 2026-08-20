@@ -196,7 +196,9 @@ def SL宝石(gf: GemFilter, saveIndex=1, 背包上界=5, target=GemLevel.顶级,
             # 出货了就保存, 退出死循环
             if isGood:
                 退出并保存()
-                重新登录()
+                # 保存不一定能存上, 求稳, 先不要重新登录了
+                toast("出货了，但是不一定保存成功了。请手动保存并重新登录后再使用宝石")
+                # 重新登录()
                 break
             else:
                 pClick(v["融合器-材料详情-关闭"], before=min)
